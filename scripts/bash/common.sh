@@ -22,38 +22,20 @@ get_scriptify_root() {
     fi
 }
 
-# 获取用户项目目录
-get_projects_dir() {
-    SCRIPTIFY_ROOT=$(get_scriptify_root)
-    echo "$SCRIPTIFY_ROOT/projects"
-}
-
-# 获取当前项目路径（从参数或环境变量）
+# 获取当前剧本项目目录（就是工作区根目录）
 get_current_project() {
-    if [ -n "$1" ]; then
-        # 从参数获取项目名
-        PROJECTS_DIR=$(get_projects_dir)
-        echo "$PROJECTS_DIR/$1"
-    elif [ -n "$SCRIPTIFY_PROJECT" ]; then
-        # 从环境变量获取
-        echo "$SCRIPTIFY_PROJECT"
-    else
-        # 查找最新的项目
-        PROJECTS_DIR=$(get_projects_dir)
-        if [ -d "$PROJECTS_DIR" ]; then
-            latest=$(ls -t "$PROJECTS_DIR" 2>/dev/null | head -1)
-            if [ -n "$latest" ]; then
-                echo "$PROJECTS_DIR/$latest"
-            fi
-        fi
-    fi
+    get_scriptify_root
 }
 
-# 获取项目名称
+# 获取项目名称（从配置文件读取）
 get_project_name() {
-    project_dir=$(get_current_project "$@")
-    if [ -n "$project_dir" ]; then
-        basename "$project_dir"
+    SCRIPTIFY_ROOT=$(get_scriptify_root)
+    if [ -f "$SCRIPTIFY_ROOT/.scriptify/config.json" ]; then
+        # 从 config.json 读取项目名称
+        grep -o '"name"[[:space:]]*:[[:space:]]*"[^"]*"' "$SCRIPTIFY_ROOT/.scriptify/config.json" | \
+        sed 's/"name"[[:space:]]*:[[:space:]]*"\([^"]*\)"/\1/'
+    else
+        basename "$SCRIPTIFY_ROOT"
     fi
 }
 
@@ -154,26 +136,13 @@ show_word_count_info() {
     fi
 }
 
-# 检查项目是否存在
-check_project_exists() {
-    local project_name="$1"
-    local project_dir=$(get_current_project "$project_name")
-
-    if [ -z "$project_dir" ] || [ ! -d "$project_dir" ]; then
-        output_json "{\"status\": \"error\", \"message\": \"项目不存在: $project_name\"}"
-        exit 1
-    fi
-
-    echo "$project_dir"
-}
-
-# 检查项目配置文件是否存在
-check_project_config() {
-    local project_dir="$1"
+# 检查spec.json配置文件是否存在
+check_spec_exists() {
+    local project_dir=$(get_current_project)
     local config_file="$project_dir/spec.json"
 
     if [ ! -f "$config_file" ]; then
-        output_json "{\"status\": \"error\", \"message\": \"项目配置文件不存在，请先运行 /spec\"}"
+        output_json "{\"status\": \"error\", \"message\": \"项目配置文件不存在，请先运行 /spec 定义剧本规格\"}"
         exit 1
     fi
 

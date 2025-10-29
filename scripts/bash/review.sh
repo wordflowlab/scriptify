@@ -26,39 +26,10 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# 获取项目路径
-PROJECT_DIR=$(get_current_project "$PROJECT_NAME")
-
-if [ -z "$PROJECT_DIR" ]; then
-    output_json "{\"status\": \"error\", \"message\": \"未找到项目\"}"
-    exit 1
-fi
-
-PROJECT_NAME=$(basename "$PROJECT_DIR")
-SPEC_FILE=$(check_project_config "$PROJECT_DIR")
-
-# 确定要评估的文件
-if [ -n "$EPISODE" ]; then
-    SCRIPT_FILE="$PROJECT_DIR/episodes/ep${EPISODE}.md"
-
-    if [ ! -f "$SCRIPT_FILE" ]; then
-        output_json "{\"status\": \"error\", \"message\": \"第${EPISODE}集不存在\"}"
-        exit 1
-    fi
-
-    script_content=$(cat "$SCRIPT_FILE")
-    word_count=$(count_script_words "$SCRIPT_FILE")
-    review_scope="第${EPISODE}集"
-else
-    # 评估整个项目
-    episode_count=$(ls -1 "$PROJECT_DIR/episodes"/ep*.md 2>/dev/null | wc -l | tr -d ' ')
-
-    if [ "$episode_count" -eq 0 ]; then
-        output_json "{\"status\": \"error\", \"message\": \"没有可评估的剧本\"}"
-        exit 1
-    fi
-
-    # 读取第一集作为示例
+# 获取项目路径（工作区根目录）
+PROJECT_DIR=$(get_current_project)
+PROJECT_NAME=$(get_project_name)
+# 读取第一集作为示例
     SCRIPT_FILE="$PROJECT_DIR/episodes/ep1.md"
     script_content=$(cat "$SCRIPT_FILE")
     word_count=$(count_script_words "$SCRIPT_FILE")

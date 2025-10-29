@@ -36,72 +36,9 @@ if [ -z "$FOCUS" ]; then
     FOCUS="all"
 fi
 
-# 获取项目路径
-PROJECT_DIR=$(get_current_project "$PROJECT_NAME")
-
-if [ -z "$PROJECT_DIR" ]; then
-    output_json "{\"status\": \"error\", \"message\": \"未找到项目\"}"
-    exit 1
-fi
-
-PROJECT_NAME=$(basename "$PROJECT_DIR")
-SPEC_FILE=$(check_project_config "$PROJECT_DIR")
-
-# 如果未指定集数,列出所有可润色的剧本
-if [ -z "$EPISODE" ]; then
-    episodes_dir="$PROJECT_DIR/episodes"
-
-    if [ ! -d "$episodes_dir" ]; then
-        output_json "{
-          \"status\": \"error\",
-          \"message\": \"没有找到剧本文件\",
-          \"suggestion\": \"请先创建剧本\"
-        }"
-        exit 1
-    fi
-
-    # 收集所有剧本信息
-    episode_list=()
-    for ep_file in "$episodes_dir"/ep*.md; do
-        [ -f "$ep_file" ] || continue
-
-        ep_num=$(basename "$ep_file" .md | sed 's/ep//')
-        word_count=$(count_script_words "$ep_file")
-
-        # 检查是否有[待润色]或[用户填充]标记
-        needs_polish="false"
-        if grep -q "\[待润色\|\[用户填充" "$ep_file"; then
-            needs_polish="true"
-        fi
-
-        episode_list+=("{\"episode\": $ep_num, \"word_count\": $word_count, \"needs_polish\": $needs_polish, \"file\": \"$ep_file\"}")
-    done
-
-    # 组合JSON数组
-    episodes_json=$(printf '%s\n' "${episode_list[@]}" | paste -sd ',' -)
-
-    output_json "{
-      \"status\": \"success\",
-      \"action\": \"list\",
-      \"project_name\": \"$PROJECT_NAME\",
-      \"episodes\": [$episodes_json],
-      \"message\": \"请选择要润色的集数\"
-    }"
-    exit 0
-fi
-
-# 指定了集数,准备润色
-SCRIPT_FILE="$PROJECT_DIR/episodes/ep${EPISODE}.md"
-
-if [ ! -f "$SCRIPT_FILE" ]; then
-    output_json "{
-      \"status\": \"error\",
-      \"message\": \"第${EPISODE}集不存在\",
-      \"suggestion\": \"请先创建该集剧本\"
-    }"
-    exit 1
-fi
-
+# 获取项目路径（工作区根目录）
+PROJECT_DIR=$(get_current_project)
+PROJECT_NAME=$(get_project_name)
 # 读取剧本内容
 script_content=$(cat "$SCRIPT_FILE")
 word_count=$(count_script_words "$SCRIPT_FILE")

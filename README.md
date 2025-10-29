@@ -34,7 +34,7 @@
 ## 📦 安装
 
 ```bash
-npm install -g scriptify
+npm install -g ai-scriptify
 ```
 
 或本地开发:
@@ -50,33 +50,45 @@ npm run build
 
 ## 🚀 快速开始
 
-### 1. 创建项目
+### 1. 初始化剧本项目
 
 ```bash
-scriptify /new 我的第一个剧本
+# 交互式选择 AI 助手、剧本类型、脚本类型
+scriptify init "我的第一部剧本"
+
+cd "我的第一部剧本"
 ```
+
+**支持13个AI编程助手**:
+- Claude Code, Cursor, Gemini CLI
+- Windsurf, Roo Code, GitHub Copilot
+- Qwen Code, OpenCode, Codex CLI
+- Kilo Code, Auggie CLI, CodeBuddy, Amazon Q Developer
 
 ### 2. 定义剧本规格
 
 ```bash
-scriptify /spec
+/spec
 ```
 
-交互式选择:
+AI 引导你填写:
 - 类型: 短剧/短视频/长剧/电影
-- 时长: 10分钟×10集
-- 题材: 悬疑/言情/职场等
+- 时长: 10分钟×10集 或 90分钟
+- 题材: 悬疑/言情/职场/古装等
 - 受众: 年龄段和性别
+- 目标平台: 抖音/快手/B站等
 
 ### 3. 开始创作
 
-**教练模式** (推荐新手):
+**使用 Slash Commands 完成创作流程**:
 ```bash
-scriptify /idea          # 构思故事创意
-scriptify /outline       # 构建故事大纲
-scriptify /characters    # 设计人物
-scriptify /scene         # 分场大纲
-scriptify /script        # 逐场写作
+/idea          # 1. 构思故事创意（主角、目标、冲突）
+/outline       # 2. 构建故事大纲（三幕结构）
+/characters    # 3. 设计人物角色
+/scene         # 4. 规划场次大纲
+/script        # 5. 编写完整剧本（教练/快速/混合模式）
+/polish        # 6. 润色优化剧本
+/visualize     # 7. 生成分镜脚本
 ```
 
 **快速模式** (追求效率):

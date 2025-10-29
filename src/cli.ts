@@ -49,7 +49,7 @@ displayProjectBanner();
 program
   .name('scriptify')
   .description(chalk.cyan('Scriptify - AI 驱动的剧本创作工具'))
-  .version('0.2.2');
+  .version('0.3.0');
 
 // /init - 初始化项目(支持13个AI助手)
 program
@@ -116,9 +116,8 @@ program
         process.exit(1);
       }
 
-      // 创建基础项目结构 + AI配置目录
+      // 创建基础项目结构（工作区就是剧本项目）
       const dirs = [
-        'projects',
         '.scriptify',
         `${aiConfig.dir}/${aiConfig.commandsDir}`
       ];
@@ -135,7 +134,7 @@ program
         scriptType: selectedScriptType,
         defaultType: selectedType,
         created: new Date().toISOString(),
-        version: '0.2.2'
+        version: '0.3.0'
       };
       await fs.writeJson(path.join(projectPath, '.scriptify', 'config.json'), config, { spaces: 2 });
 
@@ -196,7 +195,7 @@ scripts:
       // 创建README
       const readme = `# ${name}
 
-Scriptify 剧本创作项目
+使用 Scriptify 创作的${selectedType}剧本项目
 
 ## 配置
 
@@ -204,25 +203,42 @@ Scriptify 剧本创作项目
 - **剧本类型**: ${selectedType}
 - **脚本类型**: ${selectedScriptType === 'sh' ? 'POSIX Shell (macOS/Linux)' : 'PowerShell (Windows)'}
 
-## 快速开始
+## 创作流程
+
+使用 Slash Commands 完成剧本创作：
 
 \`\`\`bash
-# 创建新剧本
-scriptify new "我的第一部剧本"
-
-# 查看所有项目
-scriptify list
-
-# 查看帮助
-scriptify help
+/spec         # 1. 定义剧本规格（类型、时长、受众）
+/idea         # 2. 构思故事创意（主角、目标、冲突）
+/outline      # 3. 创建故事大纲（三幕结构）
+/characters   # 4. 设定人物角色
+/scene        # 5. 规划场次大纲
+/script       # 6. 编写完整剧本
+/polish       # 7. 润色优化剧本
+/visualize    # 8. 生成分镜脚本
 \`\`\`
 
 ## 项目结构
 
-- \`projects/\` - 所有剧本项目
+- \`spec.json\` - 剧本规格配置
+- \`idea.md\` - 故事创意
+- \`outline.md\` - 故事大纲
+- \`characters.md\` - 人物设定
+- \`scenes.md\` - 场次大纲
+- \`script.md\` - 完整剧本
 - \`scripts/${scriptsSubDir}/\` - ${selectedScriptType === 'sh' ? 'Bash' : 'PowerShell'}脚本
 - \`templates/\` - AI提示词模板
 - \`${aiConfig.dir}/\` - ${aiConfig.displayName}配置
+
+## 更多命令
+
+\`\`\`bash
+/review       # 评估剧本质量
+/hook-check   # 检查开场Hook
+/optimize     # 优化短剧节奏
+/compress     # 压缩剧本时长
+/export       # 导出不同格式
+\`\`\`
 
 ## 文档
 
@@ -238,74 +254,12 @@ scriptify help
       if (!options.here) {
         console.log(`  • cd ${name}`);
       }
-      console.log(`  • scriptify new "我的第一部剧本"`);
-      console.log(`  • scriptify help`);
+      console.log(`  • 运行 /spec 定义剧本规格`);
+      console.log(`  • 运行 /idea 开始构思创意`);
 
     } catch (error) {
       spinner.fail('初始化项目失败');
       console.error(error);
-      process.exit(1);
-    }
-  });
-
-// /new - 创建新项目
-program
-  .command('new')
-  .description('创建新剧本项目')
-  .argument('<name>', '项目名称')
-  .action(async (name: string) => {
-    const spinner = ora('创建项目中...').start();
-
-    try {
-      const result = await executeBashScript('new', [name]);
-
-      if (result.status === 'success') {
-        spinner.succeed(result.message);
-        displayInfo(`项目路径: ${result.project_path}`);
-        console.log('');
-        displayInfo('下一步:');
-        result.next_steps?.forEach((step: string) => {
-          console.log(`  • ${step}`);
-        });
-      } else {
-        spinner.fail(result.message);
-        process.exit(1);
-      }
-    } catch (error) {
-      spinner.fail('创建项目失败');
-      displayError(error instanceof Error ? error.message : String(error));
-      process.exit(1);
-    }
-  });
-
-// /list - 列出所有项目
-program
-  .command('list')
-  .description('列出所有剧本项目')
-  .action(async () => {
-    try {
-      const result = await executeBashScript('list');
-
-      if (result.status === 'success') {
-        if (result.projects.length === 0) {
-          displayInfo(result.message || '暂无项目');
-        } else {
-          console.log(chalk.bold('\n项目列表:\n'));
-          result.projects.forEach((project: any) => {
-            console.log(
-              `  ${chalk.cyan(project.name.padEnd(20))} ` +
-                `${chalk.dim(project.type.padEnd(10))} ` +
-                `${chalk.gray(project.modified)}`
-            );
-          });
-          console.log('');
-        }
-      } else {
-        displayError(result.message || '发生未知错误');
-        process.exit(1);
-      }
-    } catch (error) {
-      displayError(error instanceof Error ? error.message : String(error));
       process.exit(1);
     }
   });

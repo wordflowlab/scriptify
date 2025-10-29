@@ -5,24 +5,9 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/common.sh"
 
-# 获取项目路径
-PROJECT_DIR=$(get_current_project "$1")
-
-if [ -z "$PROJECT_DIR" ]; then
-    output_json "{\"status\": \"error\", \"message\": \"未找到项目\"}"
-    exit 1
-fi
-
-PROJECT_NAME=$(basename "$PROJECT_DIR")
-NOVEL_FILE="$PROJECT_DIR/novel/original.txt"
-ANALYSIS_FILE="$PROJECT_DIR/novel/analysis.md"
-
-# 检查小说文件是否存在
-if [ ! -f "$NOVEL_FILE" ]; then
-    output_json "{\"status\": \"error\", \"message\": \"请先运行 /import 导入小说\"}"
-    exit 1
-fi
-
+# 获取项目路径（工作区根目录）
+PROJECT_DIR=$(get_current_project)
+PROJECT_NAME=$(get_project_name)
 # 读取小说内容
 novel_content=$(cat "$NOVEL_FILE")
 word_count=$(count_script_words "$NOVEL_FILE")

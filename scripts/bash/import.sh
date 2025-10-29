@@ -30,25 +30,9 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# 获取项目路径
-PROJECT_DIR=$(get_current_project "$PROJECT_NAME")
-
-if [ -z "$PROJECT_DIR" ]; then
-    output_json "{\"status\": \"error\", \"message\": \"未找到项目\"}"
-    exit 1
-fi
-
-# 检查小说文件
-if [ -z "$NOVEL_FILE" ]; then
-    output_json "{\"status\": \"error\", \"message\": \"请指定小说文件路径\"}"
-    exit 1
-fi
-
-if [ ! -f "$NOVEL_FILE" ]; then
-    output_json "{\"status\": \"error\", \"message\": \"小说文件不存在: $NOVEL_FILE\"}"
-    exit 1
-fi
-
+# 获取项目路径（工作区根目录）
+PROJECT_DIR=$(get_current_project)
+PROJECT_NAME=$(get_project_name)
 PROJECT_NAME=$(basename "$PROJECT_DIR")
 NOVEL_DIR="$PROJECT_DIR/novel"
 IMPORTED_FILE="$NOVEL_DIR/original.txt"

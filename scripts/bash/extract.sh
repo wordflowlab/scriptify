@@ -5,25 +5,9 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/common.sh"
 
-# 获取项目路径
-PROJECT_DIR=$(get_current_project "$1")
-
-if [ -z "$PROJECT_DIR" ]; then
-    output_json "{\"status\": \"error\", \"message\": \"未找到项目\"}"
-    exit 1
-fi
-
-PROJECT_NAME=$(basename "$PROJECT_DIR")
-SPEC_FILE=$(check_project_config "$PROJECT_DIR")
-ANALYSIS_FILE="$PROJECT_DIR/novel/analysis.md"
-EXTRACT_FILE="$PROJECT_DIR/novel/extracted_plots.md"
-
-# 检查前置文件
-if [ ! -f "$ANALYSIS_FILE" ]; then
-    output_json "{\"status\": \"error\", \"message\": \"请先运行 /analyze 分析小说结构\"}"
-    exit 1
-fi
-
+# 获取项目路径（工作区根目录）
+PROJECT_DIR=$(get_current_project)
+PROJECT_NAME=$(get_project_name)
 # 读取已有内容
 spec_content=$(cat "$SPEC_FILE")
 analysis_content=$(cat "$ANALYSIS_FILE")

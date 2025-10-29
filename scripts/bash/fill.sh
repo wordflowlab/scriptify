@@ -27,83 +27,9 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# 获取项目路径
-PROJECT_DIR=$(get_current_project "$PROJECT_NAME")
-
-if [ -z "$PROJECT_DIR" ]; then
-    output_json "{\"status\": \"error\", \"message\": \"未找到项目\"}"
-    exit 1
-fi
-
-PROJECT_NAME=$(basename "$PROJECT_DIR")
-EPISODES_DIR="$PROJECT_DIR/episodes"
-
-# 如果未指定集数,列出所有可填充的集
-if [ -z "$EPISODE" ]; then
-    # 查找所有混合模式的剧本
-    hybrid_episodes=()
-
-    if [ -d "$EPISODES_DIR" ]; then
-        for ep_file in "$EPISODES_DIR"/ep*.md; do
-            [ -f "$ep_file" ] || continue
-
-            # 检查是否是混合模式且有待填充内容
-            if grep -q "模式: 混合模式" "$ep_file" && grep -q "\[用户填充" "$ep_file"; then
-                ep_num=$(basename "$ep_file" .md | sed 's/ep//')
-
-                # 统计待填充项
-                fill_count=$(grep -c "\[用户填充" "$ep_file")
-                total_words=$(count_script_words "$ep_file")
-
-                hybrid_episodes+=("{\"episode\": $ep_num, \"fill_count\": $fill_count, \"word_count\": $total_words, \"file\": \"$ep_file\"}")
-            fi
-        done
-    fi
-
-    # 组合JSON数组
-    episodes_json=$(printf '%s\n' "${hybrid_episodes[@]}" | paste -sd ',' -)
-
-    if [ ${#hybrid_episodes[@]} -eq 0 ]; then
-        output_json "{
-          \"status\": \"info\",
-          \"message\": \"没有找到需要填充的混合模式剧本\",
-          \"project_name\": \"$PROJECT_NAME\",
-          \"suggestion\": \"请先使用 /script --mode hybrid 创建混合模式剧本\"
-        }"
-    else
-        output_json "{
-          \"status\": \"success\",
-          \"action\": \"list\",
-          \"project_name\": \"$PROJECT_NAME\",
-          \"hybrid_episodes\": [$episodes_json],
-          \"message\": \"找到 ${#hybrid_episodes[@]} 个待填充的剧本\"
-        }"
-    fi
-    exit 0
-fi
-
-# 指定了集数,处理该集的填充
-SCRIPT_FILE="$EPISODES_DIR/ep${EPISODE}.md"
-
-if [ ! -f "$SCRIPT_FILE" ]; then
-    output_json "{
-      \"status\": \"error\",
-      \"message\": \"第${EPISODE}集剧本不存在，请先运行 /script --episode $EPISODE --mode hybrid\"
-    }"
-    exit 1
-fi
-
-# 检查是否是混合模式
-if ! grep -q "模式: 混合模式" "$SCRIPT_FILE"; then
-    mode=$(grep "模式:" "$SCRIPT_FILE" | head -1 | sed 's/模式: //' | tr -d ' ')
-    output_json "{
-      \"status\": \"error\",
-      \"message\": \"第${EPISODE}集不是混合模式（当前模式: ${mode}）\",
-      \"suggestion\": \"/fill 命令仅适用于混合模式剧本\"
-    }"
-    exit 1
-fi
-
+# 获取项目路径（工作区根目录）
+PROJECT_DIR=$(get_current_project)
+PROJECT_NAME=$(get_project_name)
 # 读取剧本内容
 script_content=$(cat "$SCRIPT_FILE")
 

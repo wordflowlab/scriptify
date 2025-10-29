@@ -5,18 +5,13 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/common.sh"
 
-# 获取项目路径
-PROJECT_DIR=$(get_current_project "$1")
-
-if [ -z "$PROJECT_DIR" ]; then
-    output_json "{\"status\": \"error\", \"message\": \"未找到项目\"}"
-    exit 1
-fi
+# 获取项目路径（工作区根目录）
+PROJECT_DIR=$(get_current_project)
+PROJECT_NAME=$(get_project_name)
 
 # 检查配置文件
-SPEC_FILE=$(check_project_config "$PROJECT_DIR")
+SPEC_FILE=$(check_spec_exists)
 IDEA_FILE="$PROJECT_DIR/idea.md"
-PROJECT_NAME=$(basename "$PROJECT_DIR")
 
 # 读取剧本规格
 spec_content=$(cat "$SPEC_FILE")

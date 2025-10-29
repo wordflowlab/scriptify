@@ -32,23 +32,9 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# 获取项目路径
-PROJECT_DIR=$(get_current_project "$PROJECT_NAME")
-
-if [ -z "$PROJECT_DIR" ]; then
-    output_json "{\"status\": \"error\", \"message\": \"未找到项目\"}"
-    exit 1
-fi
-
-# 检查前置文件
-SPEC_FILE=$(check_project_config "$PROJECT_DIR")
-SCENE_FILE="$PROJECT_DIR/scene.md"
-
-if [ ! -f "$SCENE_FILE" ]; then
-    output_json "{\"status\": \"error\", \"message\": \"请先运行 /scene 完成分场大纲\"}"
-    exit 1
-fi
-
+# 获取项目路径（工作区根目录）
+PROJECT_DIR=$(get_current_project)
+PROJECT_NAME=$(get_project_name)
 PROJECT_NAME=$(basename "$PROJECT_DIR")
 EPISODES_DIR="$PROJECT_DIR/episodes"
 

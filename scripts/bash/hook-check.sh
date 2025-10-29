@@ -26,22 +26,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 PROJECT_DIR=$(get_current_project "$PROJECT_NAME")
-if [ -z "$PROJECT_DIR" ]; then
-    output_json "{\"status\": \"error\", \"message\": \"未找到项目\"}"
-    exit 1
-fi
-
-PROJECT_NAME=$(basename "$PROJECT_DIR")
-SPEC_FILE=$(check_project_config "$PROJECT_DIR")
-
-# 确定要检查的文件
-if [ -n "$EPISODE" ]; then
-    SCRIPT_FILE="$PROJECT_DIR/episodes/ep${EPISODE}.md"
-    if [ ! -f "$SCRIPT_FILE" ]; then
-        output_json "{\"status\": \"error\", \"message\": \"第${EPISODE}集不存在\"}"
-        exit 1
-    fi
-    check_scope="第${EPISODE}集"
+check_scope="第${EPISODE}集"
 else
     SCRIPT_FILE="$PROJECT_DIR/episodes/ep1.md"
     check_scope="第1集(示例)"

@@ -5,16 +5,11 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/common.sh"
 
-# 获取项目路径
-PROJECT_DIR=$(get_current_project "$1")
-
-if [ -z "$PROJECT_DIR" ]; then
-    output_json "{\"status\": \"error\", \"message\": \"未找到项目，请指定项目名称或先运行 /new 创建项目\"}"
-    exit 1
-fi
+# 获取项目路径（工作区根目录）
+PROJECT_DIR=$(get_current_project)
+PROJECT_NAME=$(get_project_name)
 
 SPEC_FILE="$PROJECT_DIR/spec.json"
-PROJECT_NAME=$(basename "$PROJECT_DIR")
 
 # 如果已有配置，读取现有配置
 if [ -f "$SPEC_FILE" ]; then

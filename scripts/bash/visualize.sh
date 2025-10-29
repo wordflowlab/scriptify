@@ -21,39 +21,9 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# 获取项目路径
-PROJECT_DIR=$(get_current_project "$PROJECT_NAME")
-
-if [ -z "$PROJECT_DIR" ]; then
-    output_json "{\"status\": \"error\", \"message\": \"未找到项目\"}"
-    exit 1
-fi
-
-PROJECT_NAME=$(basename "$PROJECT_DIR")
-SPEC_FILE=$(check_project_config "$PROJECT_DIR")
-
-# 检查是否已导入小说
-NOVEL_FILE="$PROJECT_DIR/novel.txt"
-if [ ! -f "$NOVEL_FILE" ]; then
-    output_json "{
-      \"status\": \"error\",
-      \"message\": \"未找到小说源文件\",
-      \"suggestion\": \"请先使用 /import 导入小说\"
-    }"
-    exit 1
-fi
-
-# 检查是否已完成提炼
-EXTRACTED_FILE="$PROJECT_DIR/extracted.md"
-if [ ! -f "$EXTRACTED_FILE" ]; then
-    output_json "{
-      \"status\": \"error\",
-      \"message\": \"未找到提炼情节文件\",
-      \"suggestion\": \"请先使用 /extract 提炼情节\"
-    }"
-    exit 1
-fi
-
+# 获取项目路径（工作区根目录）
+PROJECT_DIR=$(get_current_project)
+PROJECT_NAME=$(get_project_name)
 # 读取spec和相关材料
 spec_content=$(cat "$SPEC_FILE")
 novel_content=$(cat "$NOVEL_FILE")

@@ -5,20 +5,6 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/common.sh"
 
 PROJECT_DIR=$(get_current_project "$1")
-if [ -z "$PROJECT_DIR" ]; then
-    output_json "{\"status\": \"error\", \"message\": \"未找到项目\"}"
-    exit 1
-fi
-
-PROJECT_NAME=$(basename "$PROJECT_DIR")
-SPEC_FILE=$(check_project_config "$PROJECT_DIR")
-SCRIPT_FILE="$PROJECT_DIR/episodes/ep1.md"
-
-if [ ! -f "$SCRIPT_FILE" ]; then
-    output_json "{\"status\": \"error\", \"message\": \"请先生成剧本\"}"
-    exit 1
-fi
-
 spec_content=$(cat "$SPEC_FILE")
 script_content=$(cat "$SCRIPT_FILE")
 

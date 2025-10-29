@@ -19,7 +19,7 @@ PROJECT_DIR=$(get_current_project "$PROJECT_NAME")
 [ -z "$PROJECT_DIR" ] && output_json "{\"status\": \"error\", \"message\": \"未找到项目\"}" && exit 1
 
 PROJECT_NAME=$(basename "$PROJECT_DIR")
-SPEC_FILE=$(check_project_config "$PROJECT_DIR")
+SPEC_FILE=$(check_spec_exists)
 
 if [ -z "$EPISODE" ]; then
     episode_count=$(ls -1 "$PROJECT_DIR/episodes"/ep*.md 2>/dev/null | wc -l | tr -d ' ')

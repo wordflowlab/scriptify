@@ -5,23 +5,9 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/common.sh"
 
-# 获取项目路径
-PROJECT_DIR=$(get_current_project "$1")
-
-if [ -z "$PROJECT_DIR" ]; then
-    output_json "{\"status\": \"error\", \"message\": \"未找到项目\"}"
-    exit 1
-fi
-
-# 检查前置文件
-SPEC_FILE=$(check_project_config "$PROJECT_DIR")
-OUTLINE_FILE="$PROJECT_DIR/outline.md"
-
-if [ ! -f "$OUTLINE_FILE" ]; then
-    output_json "{\"status\": \"error\", \"message\": \"请先运行 /outline 完成故事大纲\"}"
-    exit 1
-fi
-
+# 获取项目路径（工作区根目录）
+PROJECT_DIR=$(get_current_project)
+PROJECT_NAME=$(get_project_name)
 CHARACTERS_DIR="$PROJECT_DIR/characters"
 PROJECT_NAME=$(basename "$PROJECT_DIR")
 
