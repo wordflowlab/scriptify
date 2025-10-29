@@ -49,7 +49,7 @@ displayProjectBanner();
 program
   .name('scriptify')
   .description(chalk.cyan('Scriptify - AI 驱动的剧本创作工具'))
-  .version('0.4.0');
+  .version('0.4.1');
 
 // /init - 初始化项目(支持13个AI助手)
 program
