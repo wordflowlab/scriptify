@@ -19,11 +19,19 @@ if [ ! -f "$IDEA_FILE" ]; then
 fi
 
 OUTLINE_FILE="$PROJECT_DIR/outline.md"
+PROGRESS_FILE="$PROJECT_DIR/.scriptify/progress.json"
 PROJECT_NAME=$(basename "$PROJECT_DIR")
 
 # 读取已有内容
 spec_content=$(cat "$SPEC_FILE")
 idea_content=$(cat "$IDEA_FILE")
+
+# 检查进度文件
+progress_data="{}"
+if [ -f "$PROGRESS_FILE" ]; then
+    # 提取 outline 部分
+    progress_data=$(cat "$PROGRESS_FILE" | grep -A 10 '"outline"' | sed -n '/"outline":/,/}/p' | sed 's/^.*"outline"://;s/,$//' || echo "{}")
+fi
 
 # 检查是否已有大纲
 if [ -f "$OUTLINE_FILE" ]; then
@@ -39,6 +47,7 @@ if [ -f "$OUTLINE_FILE" ]; then
       \"idea_content\": \"$idea_content\",
       \"existing_outline\": \"$existing_outline\",
       \"word_count\": $word_count,
+      \"progress\": $progress_data,
       \"message\": \"发现已有大纲，AI 可引导用户审查或修改\"
     }"
 else
@@ -102,6 +111,7 @@ EOF
       \"outline_file\": \"$OUTLINE_FILE\",
       \"spec\": $spec_content,
       \"idea_content\": \"$idea_content\",
+      \"progress\": $progress_data,
       \"message\": \"已创建大纲模板，AI 可根据模式引导用户填写\"
     }"
 fi
