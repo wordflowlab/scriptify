@@ -20,6 +20,11 @@ import {
 import { executeBashScript } from './utils/bash-runner.js';
 import { parseCommandTemplate } from './utils/yaml-parser.js';
 import { AIConfig } from './types/index.js';
+import {
+  generateSpecCommand,
+  generateIdeaCommand,
+  generateOutlineCommand
+} from './utils/command-generator.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -49,7 +54,7 @@ displayProjectBanner();
 program
   .name('scriptify')
   .description(chalk.cyan('Scriptify - AI 驱动的剧本创作工具'))
-  .version('0.3.0');
+  .version('0.3.1');
 
 // /init - 初始化项目(支持13个AI助手)
 program
@@ -134,7 +139,7 @@ program
         scriptType: selectedScriptType,
         defaultType: selectedType,
         created: new Date().toISOString(),
-        version: '0.3.0'
+        version: '0.3.1'
       };
       await fs.writeJson(path.join(projectPath, '.scriptify', 'config.json'), config, { spaces: 2 });
 
@@ -168,14 +173,25 @@ program
         await fs.copy(templatesSource, templatesTarget);
       }
 
-      // 生成AI配置文件
+      // 生成AI配置文件（核心命令使用交互式内容，其他命令使用简单引用）
       const commandFiles = await fs.readdir(path.join(packageRoot, 'templates', 'commands'));
       const scriptExt = selectedScriptType === 'ps' ? 'ps1' : 'sh';
 
       for (const file of commandFiles) {
         if (file.endsWith('.md')) {
           const cmdName = file.replace('.md', '');
-          const content = `---
+          let content: string;
+
+          // 核心命令使用完整的交互式引导内容
+          if (cmdName === 'spec') {
+            content = generateSpecCommand(selectedScriptType as 'sh' | 'ps', selectedType);
+          } else if (cmdName === 'idea') {
+            content = generateIdeaCommand(selectedScriptType as 'sh' | 'ps');
+          } else if (cmdName === 'outline') {
+            content = generateOutlineCommand(selectedScriptType as 'sh' | 'ps');
+          } else {
+            // 其他命令仍然使用简单引用
+            content = `---
 description: ${cmdName}命令
 scripts:
   ${selectedScriptType}: ../../scripts/${scriptsSubDir}/${cmdName}.${scriptExt}
@@ -185,6 +201,8 @@ scripts:
 
 详见 templates/commands/${file}
 `;
+          }
+
           await fs.writeFile(
             path.join(projectPath, aiConfig.dir, aiConfig.commandsDir, file),
             content
