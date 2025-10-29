@@ -10,13 +10,36 @@ import {
   displayProjectBanner,
   displaySuccess,
   displayError,
-  displayInfo
+  displayInfo,
+  displayStep,
+  isInteractive,
+  selectAIAssistant,
+  selectScriptType,
+  selectBashScriptType
 } from './utils/interactive.js';
 import { executeBashScript } from './utils/bash-runner.js';
 import { parseCommandTemplate } from './utils/yaml-parser.js';
+import { AIConfig } from './types/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// AI 平台配置 - 所有支持的平台
+const AI_CONFIGS: AIConfig[] = [
+  { name: 'claude', dir: '.claude', commandsDir: 'commands', displayName: 'Claude Code' },
+  { name: 'cursor', dir: '.cursor', commandsDir: 'commands', displayName: 'Cursor' },
+  { name: 'gemini', dir: '.gemini', commandsDir: 'commands', displayName: 'Gemini CLI' },
+  { name: 'windsurf', dir: '.windsurf', commandsDir: 'workflows', displayName: 'Windsurf' },
+  { name: 'roocode', dir: '.roo', commandsDir: 'commands', displayName: 'Roo Code' },
+  { name: 'copilot', dir: '.github', commandsDir: 'prompts', displayName: 'GitHub Copilot' },
+  { name: 'qwen', dir: '.qwen', commandsDir: 'commands', displayName: 'Qwen Code' },
+  { name: 'opencode', dir: '.opencode', commandsDir: 'command', displayName: 'OpenCode' },
+  { name: 'codex', dir: '.codex', commandsDir: 'prompts', displayName: 'Codex CLI' },
+  { name: 'kilocode', dir: '.kilocode', commandsDir: 'workflows', displayName: 'Kilo Code' },
+  { name: 'auggie', dir: '.augment', commandsDir: 'commands', displayName: 'Auggie CLI' },
+  { name: 'codebuddy', dir: '.codebuddy', commandsDir: 'commands', displayName: 'CodeBuddy' },
+  { name: 'q', dir: '.amazonq', commandsDir: 'prompts', displayName: 'Amazon Q Developer' }
+];
 
 const program = new Command();
 
@@ -26,15 +49,45 @@ displayProjectBanner();
 program
   .name('scriptify')
   .description(chalk.cyan('Scriptify - AI 驱动的剧本创作工具'))
-  .version('0.2.1');
+  .version('0.2.2');
 
-// /init - 初始化项目(为Claude Code配置)
+// /init - 初始化项目(支持13个AI助手)
 program
   .command('init')
   .argument('[name]', '项目名称')
   .option('--here', '在当前目录初始化')
-  .description('初始化Scriptify项目(生成.claude配置)')
+  .option('--ai <type>', '选择 AI 助手 (claude|cursor|gemini|windsurf|roocode|copilot|qwen|opencode|codex|kilocode|auggie|codebuddy|q)')
+  .description('初始化Scriptify项目(生成AI配置)')
   .action(async (name, options) => {
+    // 交互式选择
+    const shouldShowInteractive = isInteractive() && !options.ai;
+
+    let selectedAI = 'claude';
+    let selectedScriptType = 'sh';
+    let selectedType = '短剧';
+
+    if (shouldShowInteractive) {
+      // 显示欢迎横幅
+      displayProjectBanner();
+
+      // [1/3] 选择 AI 助手
+      displayStep(1, 3, '选择 AI 助手');
+      selectedAI = await selectAIAssistant(AI_CONFIGS);
+      console.log('');
+
+      // [2/3] 选择剧本类型
+      displayStep(2, 3, '选择剧本类型');
+      selectedType = await selectScriptType();
+      console.log('');
+
+      // [3/3] 选择脚本类型
+      displayStep(3, 3, '选择脚本类型');
+      selectedScriptType = await selectBashScriptType();
+      console.log('');
+    } else if (options.ai) {
+      selectedAI = options.ai;
+    }
+
     const spinner = ora('正在初始化Scriptify项目...').start();
 
     try {
@@ -56,11 +109,18 @@ program
         await fs.ensureDir(projectPath);
       }
 
-      // 创建基础项目结构
+      // 获取选中的AI配置
+      const aiConfig = AI_CONFIGS.find(c => c.name === selectedAI);
+      if (!aiConfig) {
+        spinner.fail(`不支持的AI助手: ${selectedAI}`);
+        process.exit(1);
+      }
+
+      // 创建基础项目结构 + AI配置目录
       const dirs = [
         'projects',
-        '.claude/commands',
-        '.scriptify'
+        '.scriptify',
+        `${aiConfig.dir}/${aiConfig.commandsDir}`
       ];
 
       for (const dir of dirs) {
@@ -71,27 +131,31 @@ program
       const config = {
         name: name,
         type: 'scriptify-project',
+        ai: selectedAI,
+        scriptType: selectedScriptType,
+        defaultType: selectedType,
         created: new Date().toISOString(),
-        version: '0.2.1'
+        version: '0.2.2'
       };
       await fs.writeJson(path.join(projectPath, '.scriptify', 'config.json'), config, { spaces: 2 });
 
       // 从npm包复制模板和脚本到项目
       const packageRoot = path.resolve(__dirname, '..');
 
-      // 复制scripts到项目
-      const scriptsSource = path.join(packageRoot, 'scripts');
-      const scriptsTarget = path.join(projectPath, 'scripts');
+      // 根据选择的脚本类型复制对应脚本
+      const scriptsSubDir = selectedScriptType === 'ps' ? 'powershell' : 'bash';
+      const scriptsSource = path.join(packageRoot, 'scripts', scriptsSubDir);
+      const scriptsTarget = path.join(projectPath, 'scripts', scriptsSubDir);
+
       if (await fs.pathExists(scriptsSource)) {
         await fs.copy(scriptsSource, scriptsTarget);
 
         // 设置bash脚本执行权限
-        const bashDir = path.join(scriptsTarget, 'bash');
-        if (await fs.pathExists(bashDir)) {
-          const bashFiles = await fs.readdir(bashDir);
+        if (selectedScriptType === 'sh') {
+          const bashFiles = await fs.readdir(scriptsTarget);
           for (const file of bashFiles) {
             if (file.endsWith('.sh')) {
-              const filePath = path.join(bashDir, file);
+              const filePath = path.join(scriptsTarget, file);
               await fs.chmod(filePath, 0o755);
             }
           }
@@ -105,32 +169,27 @@ program
         await fs.copy(templatesSource, templatesTarget);
       }
 
-      // 复制.claude配置(如果存在dist/claude目录)
-      const claudeSource = path.join(packageRoot, 'dist', 'claude');
-      const claudeTarget = path.join(projectPath, '.claude');
-      if (await fs.pathExists(claudeSource)) {
-        await fs.copy(claudeSource, claudeTarget);
-      } else {
-        // 如果没有预构建的配置,创建基本的commands引用
-        const commandFiles = await fs.readdir(path.join(packageRoot, 'templates', 'commands'));
-        for (const file of commandFiles) {
-          if (file.endsWith('.md')) {
-            const cmdName = file.replace('.md', '');
-            const content = `---
+      // 生成AI配置文件
+      const commandFiles = await fs.readdir(path.join(packageRoot, 'templates', 'commands'));
+      const scriptExt = selectedScriptType === 'ps' ? 'ps1' : 'sh';
+
+      for (const file of commandFiles) {
+        if (file.endsWith('.md')) {
+          const cmdName = file.replace('.md', '');
+          const content = `---
 description: ${cmdName}命令
 scripts:
-  sh: ../../scripts/bash/${cmdName}.sh
+  ${selectedScriptType}: ../../scripts/${scriptsSubDir}/${cmdName}.${scriptExt}
 ---
 
 # /${cmdName}
 
 详见 templates/commands/${file}
 `;
-            await fs.writeFile(
-              path.join(projectPath, '.claude', 'commands', file),
-              content
-            );
-          }
+          await fs.writeFile(
+            path.join(projectPath, aiConfig.dir, aiConfig.commandsDir, file),
+            content
+          );
         }
       }
 
@@ -138,6 +197,12 @@ scripts:
       const readme = `# ${name}
 
 Scriptify 剧本创作项目
+
+## 配置
+
+- **AI 助手**: ${aiConfig.displayName}
+- **剧本类型**: ${selectedType}
+- **脚本类型**: ${selectedScriptType === 'sh' ? 'POSIX Shell (macOS/Linux)' : 'PowerShell (Windows)'}
 
 ## 快速开始
 
@@ -155,9 +220,9 @@ scriptify help
 ## 项目结构
 
 - \`projects/\` - 所有剧本项目
-- \`scripts/\` - Bash脚本
+- \`scripts/${scriptsSubDir}/\` - ${selectedScriptType === 'sh' ? 'Bash' : 'PowerShell'}脚本
 - \`templates/\` - AI提示词模板
-- \`.claude/\` - Claude Code配置
+- \`${aiConfig.dir}/\` - ${aiConfig.displayName}配置
 
 ## 文档
 

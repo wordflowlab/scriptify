@@ -3,6 +3,16 @@
  */
 
 /**
+ * AI 平台配置
+ */
+export interface AIConfig {
+  name: string;
+  dir: string;
+  commandsDir: string;
+  displayName: string;
+}
+
+/**
  * 剧本规格配置
  */
 export interface ScriptSpec {

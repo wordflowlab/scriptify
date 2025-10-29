@@ -5,6 +5,7 @@
 
 import inquirer from 'inquirer';
 import chalk from 'chalk';
+import { AIConfig } from '../types/index.js';
 
 /**
  * Display project banner
@@ -160,6 +161,56 @@ export function displayInfo(message: string): void {
  */
 export function isInteractive(): boolean {
   return process.stdin.isTTY === true && process.stdout.isTTY === true;
+}
+
+/**
+ * Select AI assistant interactively
+ */
+export async function selectAIAssistant(aiConfigs: AIConfig[]): Promise<string> {
+  const choices = aiConfigs.map(config => ({
+    name: `${chalk.cyan(config.name.padEnd(12))} ${chalk.dim(`(${config.displayName})`)}`,
+    value: config.name,
+    short: config.name
+  }));
+
+  const answer = await inquirer.prompt([{
+    type: 'list',
+    name: 'ai',
+    message: chalk.bold('选择你的 AI 助手:'),
+    choices,
+    default: 'claude',
+    pageSize: 15
+  }]);
+
+  return answer.ai;
+}
+
+/**
+ * Select bash script type
+ */
+export async function selectBashScriptType(): Promise<string> {
+  const scriptChoices = [
+    {
+      name: `${chalk.cyan('sh'.padEnd(12))} ${chalk.dim('(POSIX Shell - macOS/Linux)')}`,
+      value: 'sh',
+      short: 'sh'
+    },
+    {
+      name: `${chalk.cyan('ps'.padEnd(12))} ${chalk.dim('(PowerShell - Windows)')}`,
+      value: 'ps',
+      short: 'ps'
+    }
+  ];
+
+  const answer = await inquirer.prompt([{
+    type: 'list',
+    name: 'scriptType',
+    message: chalk.bold('选择脚本类型:'),
+    choices: scriptChoices,
+    default: 'sh'
+  }]);
+
+  return answer.scriptType;
 }
 
 /**
