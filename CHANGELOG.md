@@ -79,7 +79,7 @@
   - IMPLEMENTATION_STATUS.md - 实施进度
   - CLAUDE.md - 开发指导原则
 
-- ✅ **PRD文档** (docs/juben/)
+- ✅ **PRD文档** (docs/scriptify/ - 原docs/juben/)
   - PRD-01 产品定位与核心价值
   - PRD-02 三模式剧本创作系统
   - PRD-03 小说改编剧本工作流

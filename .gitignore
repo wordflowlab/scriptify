@@ -19,6 +19,9 @@ Thumbs.db
 # Scriptify projects
 projects/*/
 
+# Import directory for novels (user workspace)
+projects/*/import/
+
 # Logs
 *.log
 npm-debug.log*

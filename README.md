@@ -1,7 +1,28 @@
 # Scriptify - AI 驱动的剧本创作工具
 
-**产品定位**: AI 辅助的剧本创作工具
+> **版本**: v0.5.0
+> **状态**: ✅ 核心功能已实现
+> **定位**: 专注剧本创作阶段的AI辅助工具
+
 **核心价值**: 帮助创作者从零写好剧本,小说改编剧本,短剧/短视频剧本优化
+
+## ⚠️ 产品边界
+
+**Scriptify 专注于剧本创作**,不涉及分镜、制作、拍摄等后期环节。
+
+✅ **做什么**:
+- 原创剧本创作 (教练/快速/混合模式)
+- 小说改编剧本
+- 剧本质量评估与优化
+- 短剧/短视频剧本规范化
+
+❌ **不做什么**:
+- 分镜脚本设计
+- 视觉资产生成
+- 动态制作和剪辑
+- 配音和视频渲染
+
+💡 **如需完整制作流程**: 查看 [生态系统文档](./docs/ecosystem.md)
 
 ---
 
@@ -186,7 +207,7 @@ Bash脚本层 (scripts/bash/*.sh)
   → 输出JSON供AI使用
 ```
 
-详见: `docs/juben/架构说明-Slash-Command设计.md`
+详见: `docs/scriptify/架构说明-Slash-Command设计.md`
 
 ---
 
@@ -200,18 +221,15 @@ Bash脚本层 (scripts/bash/*.sh)
 ### 📚 学习资源
 - **[RESOURCES.md](./RESOURCES.md)** - 完整学习资源导航 ⭐ 推荐收藏
 - **[短剧剧本写作完全指南](./docs/info/短剧剧本写作完全指南.md)** - 系统化教程
-- **[短剧转动态漫SOP](./docs/info/短剧转动态漫SOP完整流程.md)** - 完整生产流程
+- **[短剧转动态漫SOP](./docs/info/短剧转动态漫SOP完整流程.md)** - 完整生产流程参考
 
-### 🔧 产品文档
-- [产品定位与核心价值](./docs/juben/PRD-01-产品定位与核心价值.md)
-- [三模式剧本创作系统](./docs/juben/PRD-02-三模式剧本创作系统.md)
-- [小说改编剧本工作流](./docs/juben/PRD-03-小说改编剧本工作流.md)
-- [短剧短视频剧本规范](./docs/juben/PRD-04-短剧短视频剧本规范.md)
-- [剧本质量评估系统](./docs/juben/PRD-05-剧本质量评估系统.md)
-- [完整创作流程与命令](./docs/juben/PRD-06-完整创作流程与命令.md)
+### 🌐 生态系统
+- **[生态系统文档](./docs/ecosystem.md)** - 从剧本到成片的完整生态 ⭐
+- **[Scriptify产品文档](./docs/scriptify/)** - 当前产品PRD (v0.5.0)
+- **[未来产品规划](./docs/roadmap/)** - Storyboardify等规划
 
-### 🏗️ 技术文档
-- **[架构说明](./docs/juben/架构说明-Slash-Command设计.md)** ⭐ 理解设计必读
+### 🔧 技术文档
+- **[架构说明](./docs/scriptify/架构说明-Slash-Command设计.md)** ⭐ 理解设计必读
 - **[项目完成报告](./docs/FINAL_REPORT.md)** - v0.1.0完整总结
 - **[验收清单](./docs/ACCEPTANCE_CHECKLIST.md)** - 功能验收
 - [PROJECT_SUMMARY.md](./PROJECT_SUMMARY.md) - 完整项目总结

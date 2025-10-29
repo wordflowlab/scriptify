@@ -22,7 +22,7 @@
 
 ## Slash Command 架构原则
 
-**重要**: 严格遵循 `docs/juben/架构说明-Slash-Command设计.md`
+**重要**: 严格遵循 `docs/scriptify/架构说明-Slash-Command设计.md`
 
 ### 三层架构
 
@@ -126,7 +126,7 @@ scriptify/
 ├── templates/        # 命令模板
 │   └── commands/     # .md命令文件
 ├── projects/         # 用户项目(不提交到git)
-├── docs/juben/       # PRD文档
+├── docs/scriptify/   # 当前产品PRD文档
 └── dist/             # 编译输出
 ```
 
@@ -147,8 +147,8 @@ scriptify/
 
 ## 参考文档
 
-- `docs/juben/架构说明-Slash-Command设计.md` - **必读!**
-- `docs/juben/PRD-06-完整创作流程与命令.md` - 命令规范
+- `docs/scriptify/架构说明-Slash-Command设计.md` - **必读!**
+- `docs/scriptify/PRD-06-完整创作流程与命令.md` - 命令规范
 - `other/article-writer/` - 架构参考
 
 ## Quality Gates
