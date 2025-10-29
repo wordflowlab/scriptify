@@ -20,11 +20,6 @@ import {
 import { executeBashScript } from './utils/bash-runner.js';
 import { parseCommandTemplate } from './utils/yaml-parser.js';
 import { AIConfig } from './types/index.js';
-import {
-  generateSpecCommand,
-  generateIdeaCommand,
-  generateOutlineCommand
-} from './utils/command-generator.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -173,40 +168,15 @@ program
         await fs.copy(templatesSource, templatesTarget);
       }
 
-      // 生成AI配置文件（核心命令使用交互式内容，其他命令使用简单引用）
+      // 生成AI配置文件（直接复制模板文件）
       const commandFiles = await fs.readdir(path.join(packageRoot, 'templates', 'commands'));
-      const scriptExt = selectedScriptType === 'ps' ? 'ps1' : 'sh';
 
       for (const file of commandFiles) {
         if (file.endsWith('.md')) {
-          const cmdName = file.replace('.md', '');
-          let content: string;
-
-          // 核心命令使用完整的交互式引导内容
-          if (cmdName === 'spec') {
-            content = generateSpecCommand(selectedScriptType as 'sh' | 'ps', selectedType);
-          } else if (cmdName === 'idea') {
-            content = generateIdeaCommand(selectedScriptType as 'sh' | 'ps');
-          } else if (cmdName === 'outline') {
-            content = generateOutlineCommand(selectedScriptType as 'sh' | 'ps');
-          } else {
-            // 其他命令仍然使用简单引用
-            content = `---
-description: ${cmdName}命令
-scripts:
-  ${selectedScriptType}: ../../scripts/${scriptsSubDir}/${cmdName}.${scriptExt}
----
-
-# /${cmdName}
-
-详见 templates/commands/${file}
-`;
-          }
-
-          await fs.writeFile(
-            path.join(projectPath, aiConfig.dir, aiConfig.commandsDir, file),
-            content
-          );
+          // 直接复制模板文件
+          const sourcePath = path.join(packageRoot, 'templates', 'commands', file);
+          const targetPath = path.join(projectPath, aiConfig.dir, aiConfig.commandsDir, file);
+          await fs.copy(sourcePath, targetPath);
         }
       }
 

@@ -10,6 +10,15 @@ PROJECT_DIR=$(get_current_project)
 PROJECT_NAME=$(get_project_name)
 
 SPEC_FILE="$PROJECT_DIR/spec.json"
+CONFIG_FILE="$PROJECT_DIR/.scriptify/config.json"
+
+# 读取 config.json 中的 defaultType (如果存在)
+DEFAULT_TYPE=""
+if [ -f "$CONFIG_FILE" ]; then
+    # 提取 defaultType 字段的值
+    DEFAULT_TYPE=$(grep -o '"defaultType"[[:space:]]*:[[:space:]]*"[^"]*"' "$CONFIG_FILE" | \
+                   sed 's/"defaultType"[[:space:]]*:[[:space:]]*"\([^"]*\)"/\1/')
+fi
 
 # 如果已有配置，读取现有配置
 if [ -f "$SPEC_FILE" ]; then
@@ -24,11 +33,11 @@ if [ -f "$SPEC_FILE" ]; then
       \"message\": \"找到现有配置，AI 可引导用户更新\"
     }"
 else
-    # 创建初始配置模板
+    # 创建初始配置模板，使用 defaultType 预填充 type 字段
     cat > "$SPEC_FILE" <<EOF
 {
   "project_name": "$PROJECT_NAME",
-  "type": "",
+  "type": "$DEFAULT_TYPE",
   "duration": "",
   "episodes": 0,
   "genre": "",
@@ -49,6 +58,7 @@ EOF
       \"project_name\": \"$PROJECT_NAME\",
       \"project_path\": \"$PROJECT_DIR\",
       \"spec_file\": \"$SPEC_FILE\",
+      \"default_type\": \"$DEFAULT_TYPE\",
       \"message\": \"已创建配置模板，AI 应引导用户填写以下信息\",
       \"required_fields\": [
         \"type (类型): 短剧/短视频/长剧/电影\",
