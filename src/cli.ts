@@ -26,7 +26,7 @@ displayProjectBanner();
 program
   .name('scriptify')
   .description(chalk.cyan('Scriptify - AI 驱动的剧本创作工具'))
-  .version('0.2.0');
+  .version('0.2.1');
 
 // /init - 初始化项目(为Claude Code配置)
 program
@@ -59,12 +59,22 @@ program
       // 创建基础项目结构
       const dirs = [
         'projects',
-        '.claude/commands'
+        '.claude/commands',
+        '.scriptify'
       ];
 
       for (const dir of dirs) {
         await fs.ensureDir(path.join(projectPath, dir));
       }
+
+      // 创建项目配置文件 (用于标识项目根目录)
+      const config = {
+        name: name,
+        type: 'scriptify-project',
+        created: new Date().toISOString(),
+        version: '0.2.1'
+      };
+      await fs.writeJson(path.join(projectPath, '.scriptify', 'config.json'), config, { spaces: 2 });
 
       // 从npm包复制模板和脚本到项目
       const packageRoot = path.resolve(__dirname, '..');

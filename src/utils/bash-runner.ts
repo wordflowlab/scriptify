@@ -4,7 +4,26 @@
 
 import { spawn } from 'child_process';
 import path from 'path';
+import fs from 'fs-extra';
 import { BashResult } from '../types/index.js';
+
+/**
+ * Find the scriptify project root directory by looking for .scriptify/config.json
+ */
+function findProjectRoot(): string {
+  let current = process.cwd();
+
+  while (current !== '/') {
+    const configPath = path.join(current, '.scriptify', 'config.json');
+    if (fs.existsSync(configPath)) {
+      return current;
+    }
+    current = path.dirname(current);
+  }
+
+  // Fallback to current directory
+  return process.cwd();
+}
 
 /**
  * Execute a bash script and return parsed JSON result
@@ -14,8 +33,9 @@ export async function executeBashScript(
   args: string[] = []
 ): Promise<BashResult> {
   return new Promise((resolve, reject) => {
+    const projectRoot = findProjectRoot();
     const scriptPath = path.join(
-      process.cwd(),
+      projectRoot,
       'scripts',
       'bash',
       `${scriptName}.sh`
@@ -66,8 +86,9 @@ export async function executeBashScriptWithOutput(
   args: string[] = []
 ): Promise<void> {
   return new Promise((resolve, reject) => {
+    const projectRoot = findProjectRoot();
     const scriptPath = path.join(
-      process.cwd(),
+      projectRoot,
       'scripts',
       'bash',
       `${scriptName}.sh`

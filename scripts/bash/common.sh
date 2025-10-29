@@ -1,19 +1,25 @@
 #!/usr/bin/env bash
 # 通用函数库 - Scriptify
 
-# 获取 Scriptify 工具根目录
+# 获取 Scriptify 项目根目录
 get_scriptify_root() {
-    # 查找包含 package.json 的 scriptify 根目录
-    current=$(pwd)
-    while [ "$current" != "/" ]; do
-        if [ -f "$current/package.json" ] && grep -q '"name": "scriptify"' "$current/package.json" 2>/dev/null; then
-            echo "$current"
-            return 0
-        fi
-        current=$(dirname "$current")
-    done
-    echo "错误: 未找到 scriptify 工具根目录" >&2
-    exit 1
+    # 查找包含 .scriptify/config.json 的项目根目录
+    if [ -f ".scriptify/config.json" ]; then
+        pwd
+    else
+        # 向上查找包含 .scriptify 的目录
+        current=$(pwd)
+        while [ "$current" != "/" ]; do
+            if [ -f "$current/.scriptify/config.json" ]; then
+                echo "$current"
+                return 0
+            fi
+            current=$(dirname "$current")
+        done
+        echo "错误: 未找到 scriptify 项目根目录" >&2
+        echo "提示: 请在 scriptify 项目目录内运行，或先运行 'scriptify init <项目名>' 创建项目" >&2
+        exit 1
+    fi
 }
 
 # 获取用户项目目录
