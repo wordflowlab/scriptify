@@ -1,0 +1,94 @@
+/**
+ * Bash script execution utilities
+ */
+
+import { spawn } from 'child_process';
+import path from 'path';
+import { BashResult } from '../types/index.js';
+
+/**
+ * Execute a bash script and return parsed JSON result
+ */
+export async function executeBashScript(
+  scriptName: string,
+  args: string[] = []
+): Promise<BashResult> {
+  return new Promise((resolve, reject) => {
+    const scriptPath = path.join(
+      process.cwd(),
+      'scripts',
+      'bash',
+      `${scriptName}.sh`
+    );
+
+    const child = spawn('bash', [scriptPath, ...args], {
+      cwd: process.cwd(),
+      env: process.env
+    });
+
+    let stdout = '';
+    let stderr = '';
+
+    child.stdout.on('data', (data) => {
+      stdout += data.toString();
+    });
+
+    child.stderr.on('data', (data) => {
+      stderr += data.toString();
+    });
+
+    child.on('close', (code) => {
+      if (code !== 0) {
+        reject(new Error(`Script exited with code ${code}: ${stderr}`));
+        return;
+      }
+
+      try {
+        // Parse JSON output from script
+        const result = JSON.parse(stdout.trim());
+        resolve(result);
+      } catch (error) {
+        reject(new Error(`Failed to parse script output: ${stdout}`));
+      }
+    });
+
+    child.on('error', (error) => {
+      reject(error);
+    });
+  });
+}
+
+/**
+ * Execute a bash script with real-time output
+ */
+export async function executeBashScriptWithOutput(
+  scriptName: string,
+  args: string[] = []
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const scriptPath = path.join(
+      process.cwd(),
+      'scripts',
+      'bash',
+      `${scriptName}.sh`
+    );
+
+    const child = spawn('bash', [scriptPath, ...args], {
+      cwd: process.cwd(),
+      env: process.env,
+      stdio: 'inherit' // Show output in real-time
+    });
+
+    child.on('close', (code) => {
+      if (code !== 0) {
+        reject(new Error(`Script exited with code ${code}`));
+        return;
+      }
+      resolve();
+    });
+
+    child.on('error', (error) => {
+      reject(error);
+    });
+  });
+}

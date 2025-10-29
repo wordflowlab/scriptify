@@ -1,0 +1,245 @@
+# Scriptify - AI 驱动的剧本创作工具
+
+**产品定位**: AI 辅助的剧本创作工具
+**核心价值**: 帮助创作者从零写好剧本,小说改编剧本,短剧/短视频剧本优化
+
+---
+
+## 🎯 核心功能
+
+### 1. 原创剧本创作
+- **教练模式**: AI 引导你思考,100%原创
+- **快速模式**: AI 生成初稿,快速迭代
+- **混合模式**: AI 提供框架,你填充细节
+
+### 2. 小说改编剧本
+- 智能分析小说结构
+- 自动提炼核心情节
+- 内心戏外化转换
+- 篇幅智能压缩
+
+### 3. 短剧/短视频优化
+- 3秒Hook设计(15种公式)
+- 爆点密度自动检测
+- 多平台适配度评估
+- 传播潜力评分
+
+### 4. 质量评估系统
+- 四维度评分(结构/人物/对话/节奏)
+- 自动优化建议
+- 版本对比分析
+
+---
+
+## 📦 安装
+
+```bash
+npm install -g scriptify
+```
+
+或本地开发:
+
+```bash
+git clone https://github.com/wordflowlab/scriptify.git
+cd scriptify
+npm install
+npm run build
+```
+
+---
+
+## 🚀 快速开始
+
+### 1. 创建项目
+
+```bash
+scriptify /new 我的第一个剧本
+```
+
+### 2. 定义剧本规格
+
+```bash
+scriptify /spec
+```
+
+交互式选择:
+- 类型: 短剧/短视频/长剧/电影
+- 时长: 10分钟×10集
+- 题材: 悬疑/言情/职场等
+- 受众: 年龄段和性别
+
+### 3. 开始创作
+
+**教练模式** (推荐新手):
+```bash
+scriptify /idea          # 构思故事创意
+scriptify /outline       # 构建故事大纲
+scriptify /characters    # 设计人物
+scriptify /scene         # 分场大纲
+scriptify /script        # 逐场写作
+```
+
+**快速模式** (追求效率):
+```bash
+scriptify /idea --mode express
+scriptify /script --mode express --episode 1
+```
+
+**混合模式** (平衡效率与原创):
+```bash
+scriptify /script --mode hybrid --episode 1
+```
+
+### 4. 质量评估
+
+```bash
+scriptify /review                # 评估剧本质量
+scriptify /optimize --auto       # 自动优化
+```
+
+### 5. 导出剧本
+
+```bash
+scriptify /export --format pdf   # 导出PDF标准剧本
+```
+
+---
+
+## 📚 完整命令列表
+
+### 项目管理 (5个)
+- `/new` - 创建新项目
+- `/open` - 打开项目
+- `/list` - 列出所有项目
+- `/save` - 保存项目
+- `/export` - 导出剧本
+
+### 原创剧本 (8个)
+- `/spec` - 定义剧本规格
+- `/idea` - 故事构思
+- `/outline` - 故事大纲
+- `/characters` - 人物设定
+- `/scene` - 分场大纲
+- `/script` - 剧本生成
+- `/fill` - 填充混合模式框架
+- `/polish` - 润色剧本
+
+### 小说改编 (7个)
+- `/import` - 导入小说
+- `/analyze` - 结构分析
+- `/extract` - 提炼情节
+- `/compress` - 篇幅压缩
+- `/visualize` - 视觉化转换
+- `/externalize` - 内心戏外化
+- `/script` - 生成剧本
+
+### 短剧优化 (5个)
+- `/hook-check` - Hook检测
+- `/explosion-density` - 爆点密度检测
+- `/platform-fit` - 平台适配度
+- `/viral-score` - 传播潜力评分
+- `/shorten` - 智能压缩
+
+### 质量评估 (5个)
+- `/review` - 质量评估
+- `/optimize` - 自动优化
+- `/diff` - 对比修改
+- `/compare` - 版本对比
+- `/export-review` - 导出评估报告
+
+### 实用工具 (5个)
+- `/help` - 帮助文档
+- `/settings` - 设置
+- `/templates` - 模板库
+- `/examples` - 示例剧本
+- `/undo` - 撤销操作
+
+---
+
+## 🏗 架构设计
+
+Scriptify 基于三层架构:
+
+```
+Markdown指令层 (templates/commands/*.md)
+  → 定义检查标准和工作流程原则
+  → 不包含硬编码对话
+
+AI执行层
+  → 灵活理解和执行
+  → 根据上下文生成个性化反馈
+
+Bash脚本层 (scripts/bash/*.sh)
+  → 文件操作和项目管理
+  → 输出JSON供AI使用
+```
+
+详见: `docs/juben/架构说明-Slash-Command设计.md`
+
+---
+
+## 📖 文档导航
+
+### 🚀 快速开始
+- **[QUICKSTART.md](./QUICKSTART.md)** - 5分钟快速入门 ⭐ 新手必读
+- **[STATUS.md](./STATUS.md)** - 项目当前状态
+- **[剧本格式快速参考](./docs/info/剧本格式快速参考.md)** - 日常创作速查 ⭐
+
+### 📚 学习资源
+- **[RESOURCES.md](./RESOURCES.md)** - 完整学习资源导航 ⭐ 推荐收藏
+- **[短剧剧本写作完全指南](./docs/info/短剧剧本写作完全指南.md)** - 系统化教程
+- **[短剧转动态漫SOP](./docs/info/短剧转动态漫SOP完整流程.md)** - 完整生产流程
+
+### 🔧 产品文档
+- [产品定位与核心价值](./docs/juben/PRD-01-产品定位与核心价值.md)
+- [三模式剧本创作系统](./docs/juben/PRD-02-三模式剧本创作系统.md)
+- [小说改编剧本工作流](./docs/juben/PRD-03-小说改编剧本工作流.md)
+- [短剧短视频剧本规范](./docs/juben/PRD-04-短剧短视频剧本规范.md)
+- [剧本质量评估系统](./docs/juben/PRD-05-剧本质量评估系统.md)
+- [完整创作流程与命令](./docs/juben/PRD-06-完整创作流程与命令.md)
+
+### 🏗️ 技术文档
+- **[架构说明](./docs/juben/架构说明-Slash-Command设计.md)** ⭐ 理解设计必读
+- **[项目完成报告](./docs/FINAL_REPORT.md)** - v0.1.0完整总结
+- **[验收清单](./docs/ACCEPTANCE_CHECKLIST.md)** - 功能验收
+- [PROJECT_SUMMARY.md](./PROJECT_SUMMARY.md) - 完整项目总结
+- [IMPLEMENTATION_STATUS.md](./IMPLEMENTATION_STATUS.md) - 实施进度
+- [CLAUDE.md](./CLAUDE.md) - 开发指导原则
+- [docs/README.md](./docs/README.md) - 文档导航中心
+
+---
+
+## 🛣 开发路线图
+
+**Phase 1: MVP** (已完成 ✅)
+- 核心命令实现
+- 三模式系统
+- 基础质量评估
+
+**Phase 2: 改编功能** (进行中 🚧)
+- 小说导入分析
+- 改编工作流
+- NLP增强
+
+**Phase 3: 短剧优化** (规划中 📋)
+- Hook公式库
+- 爆点计算器
+- 多平台适配
+
+---
+
+## 🤝 贡献
+
+欢迎提交 Issue 和 Pull Request!
+
+---
+
+## 📄 License
+
+MIT License
+
+---
+
+**版本**: v0.1.0
+**发布日期**: 2025-10-29
+**状态**: ✅ 核心功能完成,可以投入使用
