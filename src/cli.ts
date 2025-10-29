@@ -4,6 +4,8 @@ import { Command } from '@commander-js/extra-typings';
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import ora from 'ora';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import {
   displayProjectBanner,
   displaySuccess,
@@ -13,6 +15,9 @@ import {
 import { executeBashScript } from './utils/bash-runner.js';
 import { parseCommandTemplate } from './utils/yaml-parser.js';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const program = new Command();
 
 // Display banner
@@ -21,7 +26,152 @@ displayProjectBanner();
 program
   .name('scriptify')
   .description(chalk.cyan('Scriptify - AI 驱动的剧本创作工具'))
-  .version('0.1.0');
+  .version('0.2.0');
+
+// /init - 初始化项目(为Claude Code配置)
+program
+  .command('init')
+  .argument('[name]', '项目名称')
+  .option('--here', '在当前目录初始化')
+  .description('初始化Scriptify项目(生成.claude配置)')
+  .action(async (name, options) => {
+    const spinner = ora('正在初始化Scriptify项目...').start();
+
+    try {
+      // 确定项目路径
+      let projectPath: string;
+      if (options.here) {
+        projectPath = process.cwd();
+        name = path.basename(projectPath);
+      } else {
+        if (!name) {
+          spinner.fail('请提供项目名称或使用 --here 参数');
+          process.exit(1);
+        }
+        projectPath = path.join(process.cwd(), name);
+        if (await fs.pathExists(projectPath)) {
+          spinner.fail(`项目目录 "${name}" 已存在`);
+          process.exit(1);
+        }
+        await fs.ensureDir(projectPath);
+      }
+
+      // 创建基础项目结构
+      const dirs = [
+        'projects',
+        '.claude/commands'
+      ];
+
+      for (const dir of dirs) {
+        await fs.ensureDir(path.join(projectPath, dir));
+      }
+
+      // 从npm包复制模板和脚本到项目
+      const packageRoot = path.resolve(__dirname, '..');
+
+      // 复制scripts到项目
+      const scriptsSource = path.join(packageRoot, 'scripts');
+      const scriptsTarget = path.join(projectPath, 'scripts');
+      if (await fs.pathExists(scriptsSource)) {
+        await fs.copy(scriptsSource, scriptsTarget);
+
+        // 设置bash脚本执行权限
+        const bashDir = path.join(scriptsTarget, 'bash');
+        if (await fs.pathExists(bashDir)) {
+          const bashFiles = await fs.readdir(bashDir);
+          for (const file of bashFiles) {
+            if (file.endsWith('.sh')) {
+              const filePath = path.join(bashDir, file);
+              await fs.chmod(filePath, 0o755);
+            }
+          }
+        }
+      }
+
+      // 复制templates到项目
+      const templatesSource = path.join(packageRoot, 'templates');
+      const templatesTarget = path.join(projectPath, 'templates');
+      if (await fs.pathExists(templatesSource)) {
+        await fs.copy(templatesSource, templatesTarget);
+      }
+
+      // 复制.claude配置(如果存在dist/claude目录)
+      const claudeSource = path.join(packageRoot, 'dist', 'claude');
+      const claudeTarget = path.join(projectPath, '.claude');
+      if (await fs.pathExists(claudeSource)) {
+        await fs.copy(claudeSource, claudeTarget);
+      } else {
+        // 如果没有预构建的配置,创建基本的commands引用
+        const commandFiles = await fs.readdir(path.join(packageRoot, 'templates', 'commands'));
+        for (const file of commandFiles) {
+          if (file.endsWith('.md')) {
+            const cmdName = file.replace('.md', '');
+            const content = `---
+description: ${cmdName}命令
+scripts:
+  sh: ../../scripts/bash/${cmdName}.sh
+---
+
+# /${cmdName}
+
+详见 templates/commands/${file}
+`;
+            await fs.writeFile(
+              path.join(projectPath, '.claude', 'commands', file),
+              content
+            );
+          }
+        }
+      }
+
+      // 创建README
+      const readme = `# ${name}
+
+Scriptify 剧本创作项目
+
+## 快速开始
+
+\`\`\`bash
+# 创建新剧本
+scriptify new "我的第一部剧本"
+
+# 查看所有项目
+scriptify list
+
+# 查看帮助
+scriptify help
+\`\`\`
+
+## 项目结构
+
+- \`projects/\` - 所有剧本项目
+- \`scripts/\` - Bash脚本
+- \`templates/\` - AI提示词模板
+- \`.claude/\` - Claude Code配置
+
+## 文档
+
+查看 [Scriptify文档](https://github.com/wordflowlab/scriptify)
+`;
+
+      await fs.writeFile(path.join(projectPath, 'README.md'), readme);
+
+      spinner.succeed(`项目 "${name}" 初始化成功!`);
+
+      console.log('');
+      displayInfo('下一步:');
+      if (!options.here) {
+        console.log(`  • cd ${name}`);
+      }
+      console.log(`  • scriptify new "我的第一部剧本"`);
+      console.log(`  • scriptify help`);
+
+    } catch (error) {
+      spinner.fail('初始化项目失败');
+      console.error(error);
+      process.exit(1);
+    }
+  });
 
 // /new - 创建新项目
 program
