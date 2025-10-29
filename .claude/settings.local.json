@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/coso/Documents/dev/ai/wordflowlab/article-writer/dist/**)",
+      "Read(//Users/coso/Documents/dev/ai/wordflowlab/article-writer/src/**)",
+      "Read(//Users/coso/Documents/dev/ai/wordflowlab/article-writer/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
