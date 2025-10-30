@@ -6,6 +6,7 @@ import fs from 'fs-extra';
 import ora from 'ora';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { createRequire } from 'module';
 import {
   displayProjectBanner,
   displaySuccess,
@@ -18,6 +19,10 @@ import {
   selectBashScriptType
 } from './utils/interactive.js';
 import { executeBashScript } from './utils/bash-runner.js';
+
+// 读取 package.json 版本号
+const require = createRequire(import.meta.url);
+const { version } = require('../package.json');
 import { parseCommandTemplate } from './utils/yaml-parser.js';
 import { AIConfig } from './types/index.js';
 
@@ -49,7 +54,7 @@ displayProjectBanner();
 program
   .name('scriptify')
   .description(chalk.cyan('Scriptify - AI 驱动的剧本创作工具'))
-  .version('0.4.1');
+  .version(version);
 
 // /init - 初始化项目(支持13个AI助手)
 program
