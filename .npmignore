@@ -1,0 +1,32 @@
+# 源代码
+src/
+*.ts
+!*.d.ts
+tsconfig.json
+
+# 开发配置
+.claude/
+.vscode/
+.git/
+.gitignore
+
+# 文档 (保留 README.md 和 CHANGELOG.md)
+docs/
+CLAUDE.md
+PROJECT_SUMMARY.md
+IMPLEMENTATION_STATUS.md
+other/
+
+# 测试和示例项目
+projects/
+tests/
+*.test.js
+*.spec.js
+
+# 其他
+.DS_Store
+*.log
+node_modules/
+coverage/
+.env
+.env.*
