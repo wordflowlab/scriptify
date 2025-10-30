@@ -7,6 +7,62 @@
 
 ---
 
+## [0.6.0] - 2025-10-30
+
+### 🎯 聚焦核心功能
+
+**Scriptify v0.6.0** - 简化产品边界,专注剧本创作!
+
+### 🗑️ 移除功能
+
+#### 删除未实现的命令
+- ❌ **短剧优化命令** (6个)
+  - `/hook-check` - Hook检测
+  - `/explosion-density` - 爆点密度检测
+  - `/platform-fit` - 平台适配度
+  - `/viral-score` - 传播潜力评分
+  - `/shorten` - 智能压缩
+  - `/reality-check` - 现实度检测
+
+- ❌ **质量评估命令** (5个)
+  - `/review` - 质量评估
+  - `/optimize` - 自动优化
+  - `/diff` - 对比修改
+  - `/compare` - 版本对比
+  - `/export-review` - 导出评估报告
+
+- ❌ **实用工具命令** (5个)
+  - `/help`, `/settings`, `/templates`, `/examples`, `/undo`
+
+### 📝 文档更新
+
+- ✅ 重构文档结构
+  - `docs/juben/` → `docs/scriptify/` (当前产品)
+  - `docs/prd/` → `docs/roadmap/` (未来规划)
+- ✅ 新增 `docs/ecosystem.md` 生态愿景文档
+- ✅ 明确产品定位: 专注剧本创作,不涉及分镜制作
+- ✅ 更新所有文档中的命令列表和示例
+- ✅ 在 PRD-04/PRD-05 添加未实现功能标注
+
+### 🎯 保留的核心功能
+
+**20个核心命令**:
+- 📋 项目管理 (5个): new, open, list, save, export
+- ✍️ 原创剧本 (8个): spec, idea, outline, characters, scene, script, fill, polish
+- 📚 小说改编 (7个): import, analyze, extract, compress, visualize, externalize, script
+
+### 🔧 技术改进
+
+- 删除 26 个未使用的文件 (模板+脚本)
+- 简化代码库,减少 344 行代码
+- 提升产品定位清晰度
+
+### 💡 设计理念
+
+**聚焦核心**: Scriptify 专注于剧本创作阶段,将短剧优化、质量评估等功能留给未来的独立工具或第三方工具集成。
+
+---
+
 ## [0.1.0] - 2025-10-29
 
 ### 🎉 首次发布
