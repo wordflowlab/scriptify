@@ -39,16 +39,10 @@
 - 内心戏外化转换
 - 篇幅智能压缩
 
-### 3. 短剧/短视频优化
-- 3秒Hook设计(15种公式)
-- 爆点密度自动检测
-- 多平台适配度评估
-- 传播潜力评分
 
-### 4. 质量评估系统
-- 四维度评分(结构/人物/对话/节奏)
-- 自动优化建议
-- 版本对比分析
+### 3. 短剧/短视频优化
+- 标准剧本格式输出
+- 专业术语规范化
 
 ---
 
@@ -123,14 +117,7 @@ scriptify /script --mode express --episode 1
 scriptify /script --mode hybrid --episode 1
 ```
 
-### 4. 质量评估
-
-```bash
-scriptify /review                # 评估剧本质量
-scriptify /optimize --auto       # 自动优化
-```
-
-### 5. 导出剧本
+### 4. 导出剧本
 
 ```bash
 scriptify /export --format pdf   # 导出PDF标准剧本
@@ -166,26 +153,6 @@ scriptify /export --format pdf   # 导出PDF标准剧本
 - `/externalize` - 内心戏外化
 - `/script` - 生成剧本
 
-### 短剧优化 (5个)
-- `/hook-check` - Hook检测
-- `/explosion-density` - 爆点密度检测
-- `/platform-fit` - 平台适配度
-- `/viral-score` - 传播潜力评分
-- `/shorten` - 智能压缩
-
-### 质量评估 (5个)
-- `/review` - 质量评估
-- `/optimize` - 自动优化
-- `/diff` - 对比修改
-- `/compare` - 版本对比
-- `/export-review` - 导出评估报告
-
-### 实用工具 (5个)
-- `/help` - 帮助文档
-- `/settings` - 设置
-- `/templates` - 模板库
-- `/examples` - 示例剧本
-- `/undo` - 撤销操作
 
 ---
 

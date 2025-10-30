@@ -1,68 +1,129 @@
 #!/usr/bin/env bash
-# 分析小说结构
+# 小说结构分析 - 读取小说文件并提供基本信息给AI
 
 # 加载通用函数库
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/common.sh"
 
-# 获取项目路径（工作区根目录）
+# 获取项目路径
 PROJECT_DIR=$(get_current_project)
 PROJECT_NAME=$(get_project_name)
-# 读取小说内容
-novel_content=$(cat "$NOVEL_FILE")
-word_count=$(count_script_words "$NOVEL_FILE")
+NOVEL_DIR="$PROJECT_DIR/novel"
+ANALYSIS_FILE="$PROJECT_DIR/analysis.md"
 
-# 检查是否已有分析
-if [ -f "$ANALYSIS_FILE" ]; then
-    existing_analysis=$(cat "$ANALYSIS_FILE")
+# 主流程
+main() {
+    # 检查novel目录是否存在
+    if [ ! -d "$NOVEL_DIR" ]; then
+        output_json "{
+          \"status\": \"error\",
+          \"error_code\": \"NO_NOVEL\",
+          \"message\": \"未找到小说文件,请先运行 /import 导入小说\",
+          \"guide\": {
+            \"step1\": \"先运行 /import 命令导入小说\",
+            \"step2\": \"然后再运行 /analyze 进行分析\"
+          }
+        }"
+        exit 1
+    fi
 
-    output_json "{
-      \"status\": \"success\",
-      \"action\": \"review\",
-      \"project_name\": \"$PROJECT_NAME\",
-      \"analysis_file\": \"$ANALYSIS_FILE\",
-      \"novel_content\": \"$novel_content\",
-      \"word_count\": $word_count,
-      \"existing_analysis\": \"$existing_analysis\",
-      \"message\": \"发现已有分析，AI可引导用户审查或更新\"
-    }"
-else
-    # 创建分析模板
-    cat > "$ANALYSIS_FILE" <<EOF
-# 小说结构分析
+    # 检查是否有小说文件
+    if [ ! -f "$NOVEL_DIR/original.txt" ]; then
+        output_json "{
+          \"status\": \"error\",
+          \"error_code\": \"NO_NOVEL_FILE\",
+          \"message\": \"novel目录中没有找到小说文件\"
+        }"
+        exit 1
+    fi
 
-## 基本信息
-- 原文字数: ${word_count}字
-- 分析日期: $(date '+%Y-%m-%d')
+    # 统计信息
+    local original_file="$NOVEL_DIR/original.txt"
+    local word_count=$(count_script_words "$original_file")
 
-## 故事结构
+    # 检测章节
+    local chapter_files=($NOVEL_DIR/chapter-*.txt)
+    local chapter_count=0
+    local has_chapters=false
 
-### 主线情节
-(AI将分析小说的主要情节线)
+    if [ -f "${chapter_files[0]}" ]; then
+        has_chapters=true
+        chapter_count=${#chapter_files[@]}
+    else
+        # 从原文件中检测章节数
+        chapter_count=$(grep -c -E "^第[0-9零一二三四五六七八九十百千]+章" "$original_file" 2>/dev/null || echo "0")
+    fi
 
-### 人物关系
-(AI将分析主要角色及其关系)
+    # 创建分析文件(空模板,由AI填充)
+    cat > "$ANALYSIS_FILE" << 'EOF'
+# 小说结构分析报告
 
-### 关键情节点
-(AI将提炼关键转折和冲突)
+> 此文件由 /analyze 命令生成,由AI填充分析内容
 
-## 适合改编的特点
-(AI将分析哪些部分适合视觉化呈现)
+## 一、故事主线
 
-## 改编挑战
-(AI将指出需要调整或删减的部分)
+[待AI分析...]
+
+## 二、三幕结构
+
+[待AI分析...]
+
+## 三、支线分析
+
+[待AI分析...]
+
+## 四、关键情节点
+
+[待AI分析...]
+
+## 五、人物关系
+
+[待AI分析...]
+
+## 六、改编评估
+
+[待AI分析...]
 
 ---
-创建时间: $(date '+%Y-%m-%d %H:%M:%S')
+
+## 下一步
+
+基于本分析,建议:
+1. 运行 /extract 提炼核心情节
+2. 明确改编目标(集数/时长)
+3. 制定详细的分集大纲
 EOF
 
+    # 输出结果
     output_json "{
       \"status\": \"success\",
-      \"action\": \"create\",
       \"project_name\": \"$PROJECT_NAME\",
+      \"novel_info\": {
+        \"word_count\": $word_count,
+        \"chapter_count\": $chapter_count,
+        \"has_chapters\": $has_chapters,
+        \"original_file\": \"$original_file\",
+        \"novel_dir\": \"$NOVEL_DIR\"
+      },
       \"analysis_file\": \"$ANALYSIS_FILE\",
-      \"novel_content\": \"$novel_content\",
-      \"word_count\": $word_count,
-      \"message\": \"已创建分析模板，AI应分析小说结构并填写\"
+      \"message\": \"已创建分析文件,请AI根据小说内容完成深度分析\",
+      \"ai_task\": {
+        \"instruction\": \"请阅读小说内容并完成结构分析\",
+        \"files_to_read\": [
+          \"$original_file\"
+        ],
+        \"output_file\": \"$ANALYSIS_FILE\",
+        \"analysis_dimensions\": [
+          \"故事主线识别\",
+          \"三幕结构划分\",
+          \"支线重要性评估\",
+          \"关键情节点标注\",
+          \"人物关系网络\",
+          \"改编难度评估\"
+        ]
+      }
     }"
-fi
+}
+
+# 执行主流程
+main "$@"

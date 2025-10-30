@@ -192,13 +192,9 @@ Storyboardify (规划中) - 分镜设计
 /script (生成剧本)
 ```
 
-### 剧本优化流程 (3步)
+### 剧本优化流程 (1步)
 
 ```bash
-/review (质量评估)
-  ↓
-/optimize (AI优化建议)
-  ↓
 /polish (最终润色)
 ```
 
@@ -255,9 +251,6 @@ AI: 已生成大纲(60秒结构)
 $ scriptify /script --mode 快速
 AI: 自动生成完整对话和分镜
 
-$ scriptify /hook-check
-AI: Hook评分 7/10,建议优化
-
 $ scriptify /export
 ✅ 剧本已导出: scripts/职场反转-第1集.md
 ```
@@ -279,9 +272,6 @@ AI: 建议第3章内心戏转化为对话+闪回
 
 $ scriptify /script --mode 混合
 AI: 生成框架,用户补充细节
-
-$ scriptify /review
-AI: 质量评分80分,人物立体度良好
 
 $ scriptify /export --format 标准剧本
 ✅ 24集剧本已导出
