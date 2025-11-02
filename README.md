@@ -1,10 +1,8 @@
 # Scriptify - AI 驱动的剧本创作工具
 
-> **版本**: v0.7.0
-> **状态**: ✅ 核心功能已实现 + 🆕 漫剧创作支持
-> **定位**: 专注剧本创作阶段的AI辅助工具
+> 专注剧本创作阶段的AI辅助工具
 
-**核心价值**: 帮助创作者从零写好剧本,小说改编剧本,短剧/短视频剧本优化,**漫剧快速创作**
+**核心价值**: 帮助创作者从零写好剧本、小说改编剧本、漫剧快速创作
 
 ## ⚠️ 产品边界
 
@@ -39,7 +37,7 @@
 - 内心戏外化转换
 - 篇幅智能压缩
 
-### 3. 漫剧创作 (🆕 v0.7.0)
+### 3. 漫剧创作
 - **选题检查**: 五大核心标准评估,0-100分量化评分
 - **快速改编**: 5步改编法,1-2分钟黄金结构
 - **质量保障**: 自动化检查6大维度,具体改进建议
@@ -55,12 +53,10 @@
 ## 📦 安装
 
 ```bash
+# 全局安装
 npm install -g ai-scriptify
-```
 
-或本地开发:
-
-```bash
+# 或本地开发
 git clone https://github.com/wordflowlab/scriptify.git
 cd scriptify
 npm install
@@ -74,98 +70,54 @@ npm run build
 ### 1. 初始化剧本项目
 
 ```bash
-# 交互式选择 AI 助手、剧本类型、脚本类型
+# 交互式创建项目,会引导选择 AI 助手、剧本类型等
 scriptify init "我的第一部剧本"
-
 cd "我的第一部剧本"
 ```
 
-**支持13个AI编程助手**:
-- Claude Code, Cursor, Gemini CLI
-- Windsurf, Roo Code, GitHub Copilot
-- Qwen Code, OpenCode, Codex CLI
-- Kilo Code, Auggie CLI, CodeBuddy, Amazon Q Developer
-
-### 2. 定义剧本规格
-
-```bash
-/spec
-```
-
-AI 引导你填写:
-- 类型: 短剧/短视频/长剧/电影
-- 时长: 10分钟×10集 或 90分钟
-- 题材: 悬疑/言情/职场/古装等
-- 受众: 年龄段和性别
-- 目标平台: 抖音/快手/B站等
-
-### 3. 开始创作
+### 2. 开始创作
 
 #### 原创剧本流程
 
-**使用 Slash Commands 完成创作流程**:
+**完整创作流程**:
 ```bash
-/idea          # 1. 构思故事创意（主角、目标、冲突）
-/outline       # 2. 构建故事大纲（三幕结构）
-/characters    # 3. 设计人物角色
-/scene         # 4. 规划场次大纲
-/script        # 5. 编写完整剧本（教练/快速/混合模式）
-/polish        # 6. 润色优化剧本
-/visualize     # 7. 生成分镜脚本
+scriptify /spec        # 1. 定义剧本规格(类型/时长/题材)
+scriptify /idea        # 2. 构思故事创意(主角/目标/冲突)
+scriptify /outline     # 3. 构建故事大纲(三幕结构)
+scriptify /characters  # 4. 设计人物角色
+scriptify /scene       # 5. 规划场次大纲
+scriptify /script      # 6. 编写完整剧本
+scriptify /polish      # 7. 润色优化剧本
+scriptify /export      # 8. 导出成品
 ```
 
-**快速模式** (追求效率):
+**三种创作模式**:
+- **教练模式**: AI引导思考,100%原创 (`/script --mode coach`)
+- **快速模式**: AI生成初稿,快速迭代 (`/script --mode express`)
+- **混合模式**: AI提供框架,填充细节 (`/script --mode hybrid`)
+
+#### 漫剧创作流程
+
+**完整漫剧创作流程**:
 ```bash
-scriptify /idea --mode express
-scriptify /script --mode express --episode 1
+scriptify /import                  # 1. 导入小说(自动评估适配度)
+scriptify /select-novel            # 2. 选题检查(五大核心标准,0-100分)
+scriptify /adapt-comic --style 沙雕 --episodes 60 --auto  # 3. 快速改编
+scriptify /quality-check-comic --all  # 4. 批量质量检查
+scriptify /polish --focus comic    # 5. 专项润色(去AI味)
+scriptify /export                  # 6. 导出成品
 ```
 
-**混合模式** (平衡效率与原创):
-```bash
-scriptify /script --mode hybrid --episode 1
-```
+**支持的漫剧风格**:
+- 沙雕: 搞笑搞怪,神转折
+- 热血: 燃点密集,逆袭爽感
+- 甜宠: 恋爱甜度,心动瞬间
+- 悬疑: 反转钩子,追剧欲望
 
-#### 🆕 漫剧创作流程 (快速上手)
-
-```bash
-# 1. 导入小说
-scriptify /import
-# AI会自动评估是否适合漫剧,并引导选择改编类型
-
-# 2. 选题检查(五大核心标准)
-scriptify /select-novel
-# 输出: 0-100分评分 + 具体改进建议
-
-# 3. 快速改编(假设评分≥70分)
-scriptify /adapt-comic --style 沙雕 --episodes 100 --auto
-# 或互动模式:
-scriptify /adapt-comic --style 热血 --episodes 80
-
-# 4. 质量检查
-scriptify /quality-check-comic
-# 或批量检查:
-scriptify /quality-check-comic --all
-
-# 5. 专项润色(可选)
-scriptify /polish --focus comic --episode 1
-```
-
-**示例工作流**:
-```
-小说(15万字)
-  → /import → 建议50-80集漫剧
-  → /select-novel → 评分85分,适合沙雕风格
-  → /adapt-comic --style 沙雕 --episodes 60 --auto
-  → /quality-check-comic --all → 50集通过,10集需优化
-  → /polish --focus comic [针对需优化的集]
-  → 完成! 可交给 Storyboardify 制作分镜
-```
-
-### 4. 导出剧本
-
-```bash
-scriptify /export --format pdf   # 导出PDF标准剧本
-```
+**核心特色**:
+- 1-2分钟黄金结构(前10秒抛冲突,后10-20秒留钩子)
+- 5步改编法(拆书→细纲→改写→润色→调整)
+- 6大维度质量检查(时长/对白/开篇/钩子/禁止内容/口语化)
 
 ---
 
@@ -197,10 +149,10 @@ scriptify /export --format pdf   # 导出PDF标准剧本
 - `/externalize` - 内心戏外化
 - `/script` - 生成剧本
 
-### 漫剧创作 (🆕 3个)
-- `/select-novel` - 漫剧选题检查(五大核心标准)
-- `/adapt-comic` - 漫剧改编(5步改编法)
-- `/quality-check-comic` - 漫剧质量检查(自动化评分)
+### 漫剧创作 (3个)
+- `/select-novel` - 漫剧选题检查(五大核心标准,0-100分评分)
+- `/adapt-comic` - 漫剧改编(5步改编法,4种风格)
+- `/quality-check-comic` - 漫剧质量检查(6大维度自动化评分)
 
 
 ---
@@ -257,20 +209,11 @@ Bash脚本层 (scripts/bash/*.sh)
 
 ## 🛣 开发路线图
 
-**Phase 1: MVP** (已完成 ✅)
-- 核心命令实现
-- 三模式系统
-- 基础质量评估
-
-**Phase 2: 改编功能** (进行中 🚧)
-- 小说导入分析
-- 改编工作流
-- NLP增强
-
-**Phase 3: 短剧优化** (规划中 📋)
-- Hook公式库
-- 爆点计算器
-- 多平台适配
+- ✅ Phase 1: 原创剧本创作(三模式系统)
+- ✅ Phase 2: 小说改编剧本
+- ✅ Phase 3: 漫剧创作支持
+- 📋 Phase 4: Web UI版本
+- 📋 Phase 5: 协作功能
 
 ---
 
@@ -286,7 +229,4 @@ MIT License
 
 ---
 
-**版本**: v0.7.0
-**发布日期**: 2025-11-02
-**状态**: ✅ 核心功能完成 + 🆕 漫剧创作支持
-**新增**: 漫剧选题检查、改编、质量检查、专项润色
+**更新日志**: 查看 [CHANGELOG.md](./CHANGELOG.md)
