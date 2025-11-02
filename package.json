@@ -1,8 +1,8 @@
 {
   "name": "ai-scriptify",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "type": "module",
-  "description": "AI 驱动的剧本创作工具 - 专注原创剧本、小说改编、短剧优化",
+  "description": "AI 驱动的剧本创作工具 - 原创剧本、小说改编、漫剧创作",
   "keywords": [
     "screenplay",
     "script",
@@ -11,7 +11,9 @@
     "content-creation",
     "短剧",
     "剧本",
-    "小说改编"
+    "小说改编",
+    "漫剧",
+    "comic-drama"
   ],
   "author": "Scriptify Team",
   "license": "MIT",

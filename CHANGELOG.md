@@ -7,6 +7,87 @@
 
 ---
 
+## [0.7.0] - 2025-11-02
+
+### 🆕 新增 - 漫剧创作支持
+
+#### 新增命令 (3个)
+
+**1. `/select-novel` - 漫剧选题检查**
+- 五大核心筛选标准自动评估
+- 0-100分量化评分系统
+- 具体改进建议和适配度分析
+- 文件: `templates/commands/select-novel.md` + `scripts/bash/select-novel.sh`
+
+**2. `/adapt-comic` - 漫剧改编**
+- 5步改编法(拆书→细纲→改写→润色→调整)
+- 支持4种风格(沙雕/热血/甜宠/悬疑)
+- 自动/互动两种模式
+- 内置1-2分钟黄金结构标准
+- 文件: `templates/commands/adapt-comic.md` + `scripts/bash/adapt-comic.sh`
+
+**3. `/quality-check-comic` - 漫剧质量检查**
+- 6大维度自动化检查(时长/对白/开篇/钩子/禁止内容/口语化)
+- 详细评分和改进方案
+- 支持单集检查和批量检查(`--all`)
+- 文件: `templates/commands/quality-check-comic.md` + `scripts/bash/quality-check-comic.sh`
+
+#### 增强功能 (2个)
+
+**4. `/import` - 增加漫剧分析**
+- 基于字数的漫剧集数建议
+- 漫剧题材适配度评估(5星评级)
+- 智能引导选择改编类型(漫剧 vs 传统剧本)
+
+**5. `/polish` - 新增漫剧专项润色**
+- 新增 `--focus comic` 选项
+- 4大润色重点: 去AI味、补细节、留画面空白、强化钩子
+- 完整的漫剧润色检查清单
+
+### 📚 文档更新
+
+- 更新 README.md,新增漫剧创作功能介绍
+- 新增漫剧快速上手流程示例
+- 更新命令列表(20个→23个)
+- 更新版本号为 v0.7.0
+
+### 🎯 核心价值
+
+将《AI漫剧制作完整流程》文档的专业方法论,内置到Slash Command中:
+- ✅ 五大核心筛选标准(选题阶段)
+- ✅ 5步改编法(改编阶段)
+- ✅ 1-2分钟黄金结构(时长控制)
+- ✅ 4种风格的钩子设计模式
+- ✅ 去AI味技巧(润色阶段)
+- ✅ 自动化质量检查清单
+
+### 🔗 生态定位
+
+明确与 Storyboardify 的分工:
+- **Scriptify**: 小说 → 漫剧剧本
+- **Storyboardify**: 剧本 → 分镜脚本
+- 清晰分工,无重复功能
+
+### 📊 统计数据
+
+- **新增文件**: 6个(3个命令模板 + 3个Bash脚本)
+- **修改文件**: 3个(import.md, polish.md, README.md)
+- **新增代码**: ~3000行
+- **测试状态**: ✅ 所有核心脚本测试通过
+
+### 🚀 快速体验
+
+```bash
+# 完整漫剧创作流程
+scriptify /import                  # 导入小说
+scriptify /select-novel            # 选题检查(评分)
+scriptify /adapt-comic --style 沙雕 --episodes 60 --auto
+scriptify /quality-check-comic --all  # 批量质量检查
+scriptify /polish --focus comic    # 专项润色
+```
+
+---
+
 ## [0.6.1] - 2025-10-30
 
 ### 🐛 Bug 修复

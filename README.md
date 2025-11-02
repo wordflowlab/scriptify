@@ -1,10 +1,10 @@
 # Scriptify - AI 驱动的剧本创作工具
 
-> **版本**: v0.6.0
-> **状态**: ✅ 核心功能已实现
+> **版本**: v0.7.0
+> **状态**: ✅ 核心功能已实现 + 🆕 漫剧创作支持
 > **定位**: 专注剧本创作阶段的AI辅助工具
 
-**核心价值**: 帮助创作者从零写好剧本,小说改编剧本,短剧/短视频剧本优化
+**核心价值**: 帮助创作者从零写好剧本,小说改编剧本,短剧/短视频剧本优化,**漫剧快速创作**
 
 ## ⚠️ 产品边界
 
@@ -39,8 +39,14 @@
 - 内心戏外化转换
 - 篇幅智能压缩
 
+### 3. 漫剧创作 (🆕 v0.7.0)
+- **选题检查**: 五大核心标准评估,0-100分量化评分
+- **快速改编**: 5步改编法,1-2分钟黄金结构
+- **质量保障**: 自动化检查6大维度,具体改进建议
+- **专项润色**: 去AI味、补细节、强化钩子
+- **4种风格**: 沙雕/热血/甜宠/悬疑
 
-### 3. 短剧/短视频优化
+### 4. 短剧/短视频优化
 - 标准剧本格式输出
 - 专业术语规范化
 
@@ -95,6 +101,8 @@ AI 引导你填写:
 
 ### 3. 开始创作
 
+#### 原创剧本流程
+
 **使用 Slash Commands 完成创作流程**:
 ```bash
 /idea          # 1. 构思故事创意（主角、目标、冲突）
@@ -115,6 +123,42 @@ scriptify /script --mode express --episode 1
 **混合模式** (平衡效率与原创):
 ```bash
 scriptify /script --mode hybrid --episode 1
+```
+
+#### 🆕 漫剧创作流程 (快速上手)
+
+```bash
+# 1. 导入小说
+scriptify /import
+# AI会自动评估是否适合漫剧,并引导选择改编类型
+
+# 2. 选题检查(五大核心标准)
+scriptify /select-novel
+# 输出: 0-100分评分 + 具体改进建议
+
+# 3. 快速改编(假设评分≥70分)
+scriptify /adapt-comic --style 沙雕 --episodes 100 --auto
+# 或互动模式:
+scriptify /adapt-comic --style 热血 --episodes 80
+
+# 4. 质量检查
+scriptify /quality-check-comic
+# 或批量检查:
+scriptify /quality-check-comic --all
+
+# 5. 专项润色(可选)
+scriptify /polish --focus comic --episode 1
+```
+
+**示例工作流**:
+```
+小说(15万字)
+  → /import → 建议50-80集漫剧
+  → /select-novel → 评分85分,适合沙雕风格
+  → /adapt-comic --style 沙雕 --episodes 60 --auto
+  → /quality-check-comic --all → 50集通过,10集需优化
+  → /polish --focus comic [针对需优化的集]
+  → 完成! 可交给 Storyboardify 制作分镜
 ```
 
 ### 4. 导出剧本
@@ -145,13 +189,18 @@ scriptify /export --format pdf   # 导出PDF标准剧本
 - `/polish` - 润色剧本
 
 ### 小说改编 (7个)
-- `/import` - 导入小说
+- `/import` - 导入小说(支持漫剧分析)
 - `/analyze` - 结构分析
 - `/extract` - 提炼情节
 - `/compress` - 篇幅压缩
 - `/visualize` - 视觉化转换
 - `/externalize` - 内心戏外化
 - `/script` - 生成剧本
+
+### 漫剧创作 (🆕 3个)
+- `/select-novel` - 漫剧选题检查(五大核心标准)
+- `/adapt-comic` - 漫剧改编(5步改编法)
+- `/quality-check-comic` - 漫剧质量检查(自动化评分)
 
 
 ---
@@ -237,6 +286,7 @@ MIT License
 
 ---
 
-**版本**: v0.6.0
-**发布日期**: 2025-10-30
-**状态**: ✅ 核心功能完成,专注剧本创作
+**版本**: v0.7.0
+**发布日期**: 2025-11-02
+**状态**: ✅ 核心功能完成 + 🆕 漫剧创作支持
+**新增**: 漫剧选题检查、改编、质量检查、专项润色
