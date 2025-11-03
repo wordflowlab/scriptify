@@ -1,0 +1,128 @@
+# 人物原型库
+# 用于 /idea, /characters 等命令
+
+archetypes:
+  - id: professional_elite
+    label: "A. 职场精英型"
+    age_range: "28-35岁"
+    description: "有专业能力,面临职业危机或道德困境"
+    典型职业:
+      - name: "广告策划师"
+        conflict: "创意枯竭 vs 客户压力"
+        example: "《我在广告圈的那些年》"
+      - name: "律师"
+        conflict: "正义 vs 利益"
+        example: "《精英律师》"
+      - name: "医生"
+        conflict: "医术 vs 医患关系"
+        example: "《外科风云》"
+      - name: "建筑师"
+        conflict: "理想设计 vs 商业妥协"
+        example: "《筑梦者》"
+    性格特点: ["理性", "自律", "完美主义", "工作狂"]
+    成长弧线: "从追求成功到重新定义成功"
+    适合剧型: ["都市职场", "行业剧", "女性成长"]
+
+  - id: underdog_hero
+    label: "B. 普通人逆袭型"
+    age_range: "20-28岁"
+    description: "底层奋斗,遇到转折机会,一路逆袭"
+    典型职业:
+      - name: "外卖员"
+        conflict: "生存压力 vs 尊严"
+        example: "《送你一朵小红花》外卖员角色"
+      - name: "实习生"
+        conflict: "经验不足 vs 证明自己"
+        example: "《未生》"
+      - name: "小职员"
+        conflict: "被忽视 vs 抓住机会"
+        example: "《杜拉拉升职记》"
+      - name: "服务员/收银员"
+        conflict: "被看不起 vs 改变命运"
+        example: "《当幸福来敲门》"
+    性格特点: ["坚韧", "乐观", "有主见", "不服输"]
+    成长弧线: "从自卑到自信,从被动到主动"
+    适合剧型: ["励志剧", "爽文剧", "现实题材"]
+
+  - id: student_growth
+    label: "C. 学生成长型"
+    age_range: "16-22岁"
+    description: "青春叛逆,寻找自我,经历成长"
+    典型设定:
+      - name: "高中生"
+        conflict: "升学压力 vs 青春梦想"
+        example: "《少年派》"
+      - name: "大学生"
+        conflict: "理想 vs 现实"
+        example: "《致我们单纯的小美好》"
+      - name: "艺考生"
+        conflict: "天赋 vs 努力"
+        example: "《舞蹈风暴》系列"
+      - name: "留学生"
+        conflict: "文化冲突 vs 适应成长"
+        example: "《小别离》"
+    性格特点: ["热血", "冲动", "迷茫", "真诚"]
+    成长弧线: "从幼稚到成熟,找到人生方向"
+    适合剧型: ["青春剧", "校园剧", "成长剧"]
+
+  - id: special_identity
+    label: "D. 特殊身份型"
+    age_range: "不限"
+    description: "拥有外挂能力或特殊身份"
+    典型设定:
+      - name: "穿越者"
+        conflict: "现代知识 vs 古代环境"
+        example: "《庆余年》"
+      - name: "重生者"
+        conflict: "先知优势 vs 改变命运"
+        example: "《重生之嫡女归来》"
+      - name: "系统宿主"
+        conflict: "完成任务 vs 自我意志"
+        example: "《快穿之打脸狂魔》"
+      - name: "异能者"
+        conflict: "隐藏身份 vs 拯救世界"
+        example: "《全职高手》"
+    性格特点: ["聪明", "适应力强", "有目标", "善用优势"]
+    成长弧线: "从依赖外挂到真正成长"
+    适合剧型: ["网文改编", "爽剧", "玄幻剧"]
+
+# 性格组合模板
+personality_templates:
+  - type: "对立型"
+    description: "内外性格反差"
+    examples:
+      - "外表冷酷 + 内心温柔"
+      - "看似软弱 + 关键时刻强硬"
+      - "表面玩世不恭 + 实则认真负责"
+
+  - type: "成长型"
+    description: "前后性格转变"
+    examples:
+      - "从自卑到自信"
+      - "从叛逆到理解"
+      - "从利己到利他"
+
+  - type: "矛盾型"
+    description: "内在冲突"
+    examples:
+      - "理想主义 + 现实压力"
+      - "忠诚 + 背叛诱惑"
+      - "爱与恨并存"
+
+# 快速生成提示
+quick_generation_prompts:
+  professional_elite:
+    question: "选择具体职业 (A-广告策划师 / B-律师 / C-医生 / D-建筑师 / E-其他):"
+    follow_up: "这个角色面临的最大困境是什么? (A-职业危机 / B-道德困境 / C-情感抉择 / D-自定义):"
+
+  underdog_hero:
+    question: "选择起点职业 (A-外卖员 / B-实习生 / C-小职员 / D-服务员 / E-其他):"
+    follow_up: "逆袭的转折点是什么? (A-贵人相助 / B-意外机会 / C-自身努力被发现 / D-自定义):"
+
+  student_growth:
+    question: "选择学生类型 (A-高中生 / B-大学生 / C-艺考生 / D-留学生 / E-其他):"
+    follow_up: "核心成长主题是? (A-找到方向 / B-突破自我 / C-和解过去 / D-自定义):"
+
+  special_identity:
+    question: "选择特殊能力 (A-穿越 / B-重生 / C-系统 / D-异能 / E-其他):"
+    follow_up: "外挂设定是? (A-知识优势 / B-预知未来 / C-任务系统 / D-超能力 / E-自定义):"

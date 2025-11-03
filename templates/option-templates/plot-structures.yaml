@@ -1,0 +1,185 @@
+# 情节结构模板库
+# 用于 /outline, /adapt-comic 等命令
+
+# 三幕结构模板
+three_act_structures:
+  - id: classic_hero_journey
+    label: "A. 经典英雄之旅"
+    description: "传统三幕剧,适合大部分类型"
+    structure:
+      act1_setup:
+        duration: "25%"
+        key_points:
+          - "日常世界(展示主角现状)"
+          - "冒险召唤(事件打破平静)"
+          - "拒绝召唤(主角犹豫)"
+          - "跨越第一道门槛(被迫或主动进入新世界)"
+      act2_confrontation:
+        duration: "50%"
+        key_points:
+          - "考验盟友(建立关系)"
+          - "逐步升级(小挑战→大挑战)"
+          - "中点反转(重大发现或失败)"
+          - "至暗时刻(主角失去一切)"
+      act3_resolution:
+        duration: "25%"
+        key_points:
+          - "最后准备(整合力量)"
+          - "高潮对决(终极考验)"
+          - "结局(新的平衡)"
+    适用类型: ["冒险", "奇幻", "成长", "传统剧情"]
+    参考案例: ["《指环王》", "《哈利·波特》", "《狮子王》"]
+
+  - id: fast_paced_modern
+    label: "B. 快节奏现代剧"
+    description: "冲突前置,爽点密集,适合短剧"
+    structure:
+      act1_setup:
+        duration: "15%"
+        key_points:
+          - "冲突开场(直接进入矛盾)"
+          - "快速交代背景(闪回或对话)"
+          - "立即行动(主角被迫应对)"
+      act2_confrontation:
+        duration: "60%"
+        key_points:
+          - "连续爽点(每10分钟一个高潮)"
+          - "反派升级(压力层层加码)"
+          - "关系变化(感情线穿插)"
+          - "身份/实力暴露(中后期反转)"
+      act3_resolution:
+        duration: "25%"
+        key_points:
+          - "终极对决(多线汇合)"
+          - "大团圆或开放式结局"
+    适用类型: ["都市爽剧", "短剧", "网文改编"]
+    参考案例: ["《赘婿》", "《开端》", "短视频剧"]
+
+  - id: dual_timeline
+    label: "C. 双时间线/双视角"
+    description: "交叉叙事,悬念感强,适合悬疑推理"
+    structure:
+      timeline_a:
+        description: "现在时间线"
+        focus: "调查/解谜/揭秘"
+      timeline_b:
+        description: "过去时间线/另一视角"
+        focus: "真相逐步浮现"
+      convergence:
+        description: "两条线在高潮汇合"
+        key_points:
+          - "真相大白"
+          - "意外反转"
+          - "情感升华"
+    适用类型: ["悬疑", "推理", "复杂叙事"]
+    参考案例: ["《隐秘的角落》", "《沉默的真相》"]
+
+  - id: episodic_series
+    label: "D. 单元剧式结构"
+    description: "每集独立小故事,整体有主线,适合系列化"
+    structure:
+      每集结构:
+        - "引入:新案件/新冲突"
+        - "发展:调查/应对"
+        - "高潮:解决"
+        - "结尾:回归日常+埋主线伏笔"
+      主线推进:
+        - "每3-5集推进一次主线"
+        - "季终高潮解决主线"
+    适用类型: ["探案", "医疗", "律政", "职场"]
+    参考案例: ["《法医秦明》", "《外科风云》"]
+
+# 漫剧专用结构(1-2分钟)
+comic_drama_structures:
+  - id: shadian_structure
+    label: "沙雕漫剧结构"
+    timeline:
+      - time: "0-10秒"
+        content: "抛笑点/反差"
+        example: "主角穿越成恐龙,第一句话:'我TM变成恐龙了?!'"
+      - time: "10-70秒"
+        content: "密集笑点+小转折"
+        example: "系统提示→遇到霸王龙→逃跑→误打误撞升级"
+      - time: "70-90秒"
+        content: "神转折钩子"
+        example: "'系统:恭喜宿主进化为...霸王龙的老婆?!'"
+
+  - id: rexue_structure
+    label: "热血爽剧结构"
+    timeline:
+      - time: "0-10秒"
+        content: "被欺压/被看不起"
+        example: "女主被退婚,众人嘲笑"
+      - time: "10-70秒"
+        content: "实力暴露/打脸"
+        example: "女主展示真实身份/能力,全场震惊"
+      - time: "70-90秒"
+        content: "更强挑战预告"
+        example: "'某大佬:竟敢冒充我妹妹,找死!'"
+
+  - id: tianchong_structure
+    label: "甜宠漫剧结构"
+    timeline:
+      - time: "0-10秒"
+        content: "心动瞬间/甜蜜互动"
+        example: "男主'不小心'壁咚女主"
+      - time: "10-70秒"
+        content: "甜蜜升温+小误会"
+        example: "约会→暧昧→女二出现→男主解释"
+      - time: "70-90秒"
+        content: "关系进展钩子"
+        example: "男主:今晚...来我家?"
+
+  - id: xuanyi_structure
+    label: "悬疑漫剧结构"
+    timeline:
+      - time: "0-10秒"
+        content: "抛出悬念"
+        example: "尸体上有个神秘标记"
+      - time: "10-70秒"
+        content: "调查+新线索"
+        example: "发现死者生前秘密,但引出更大谜团"
+      - time: "70-90秒"
+        content: "意外反转"
+        example: "'凶手就是报案人?!'"
+
+# 节奏模板
+pacing_templates:
+  - id: fast_paced
+    label: "快节奏(爽剧/短剧)"
+    scene_duration: "1-3分钟/场景"
+    scene_per_episode: "8-12个场景"
+    conflict_frequency: "每场景至少1个冲突点"
+    适用: ["短剧", "网文改编", "爽剧"]
+
+  - id: medium_paced
+    label: "中节奏(传统剧集)"
+    scene_duration: "3-5分钟/场景"
+    scene_per_episode: "5-8个场景"
+    conflict_frequency: "每2-3个场景1个大冲突"
+    适用: ["都市剧", "职场剧", "家庭剧"]
+
+  - id: slow_paced
+    label: "慢节奏(文艺/深度剧)"
+    scene_duration: "5-10分钟/场景"
+    scene_per_episode: "3-5个场景"
+    conflict_frequency: "注重情绪积累,非冲突驱动"
+    适用: ["文艺片", "人物深度剧", "心理剧"]
+
+# AI推荐逻辑
+recommendation_rules:
+  - condition: "剧本类型=短剧 且 目标平台=抖音/快手"
+    suggest: ["fast_paced_modern", "comic_drama_structures"]
+    reason: "短视频平台需要快节奏,爽点密集"
+
+  - condition: "剧本类型=长剧 且 题材=奇幻/冒险"
+    suggest: ["classic_hero_journey"]
+    reason: "史诗感强,需要完整英雄之旅"
+
+  - condition: "剧本类型=短剧 且 题材=悬疑"
+    suggest: ["dual_timeline", "xuanyi_structure"]
+    reason: "悬疑需要双线或单集反转"
+
+  - condition: "剧本类型=系列剧"
+    suggest: ["episodic_series"]
+    reason: "单元剧式便于持续创作"
