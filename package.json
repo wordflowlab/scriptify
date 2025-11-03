@@ -1,6 +1,6 @@
 {
   "name": "ai-scriptify",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "type": "module",
   "description": "AI 驱动的剧本创作工具 - 原创剧本、小说改编、漫剧创作",
   "keywords": [
